@@ -1,0 +1,73 @@
+.container {
+    display: flex;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #05122D, #0C1444, #1C1854, #2E145D, #261342);
+}
+
+.side {
+    background-color: #031424;
+    width: 35vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    transition: 0.3s;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    box-shadow: 0 0px 24px #000000;
+}
+
+.side:hover {
+    width: 20%;
+}
+
+.btn {
+    width: 20vh;
+    position: relative;
+    background: #000536;
+    color: #1e7bd1;
+    padding: 0.7rem 1.2rem;
+    margin: 0.5rem 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: 0.3s;
+    border: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    padding: 4px;
+    background: linear-gradient(135deg, #0C1444, #190087, #6b00d7, #a230ed);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+    font-size: 1.1rem;
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title {
+    color: #fff;
+    font-size: 2rem;
+    text-align: center;
+}
