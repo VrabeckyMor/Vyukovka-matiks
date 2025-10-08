@@ -1,12 +1,15 @@
 .container {
     display: flex;
     min-height: 100vh;
+    justify-content: center;
+    align-items: stretch;
     background: linear-gradient(135deg, #05122D, #0C1444, #1C1854, #2E145D, #261342);
 }
 
 .side {
     background-color: #031424;
     width: 35vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -22,41 +25,29 @@
 }
 
 .btn {
-    width: 20vh;
+    position: fixed;
+    width: 25vh;
     position: relative;
+    z-index: 1;
     background: #000536;
-    color: #1e7bd1;
+    color: #52abd4;
     padding: 0.7rem 1.2rem;
     margin: 0.5rem 0;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
+    cursor: vertical-text;
+    font-size: 3vh;
     font-weight: bold;
     transition: 0.3s;
-    border: none;
-    z-index: 1;
-    overflow: hidden;
-}
-
-.btn::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 6px;
-    padding: 4px;
-    background: linear-gradient(135deg, #0C1444, #190087, #6b00d7, #a230ed);
-    -webkit-mask:
-      linear-gradient(#fff 0 0) content-box, 
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    z-index: 2;
-    pointer-events: none;
+    /*border: 3px solid #1e7bd1;
+    border-radius: 10px;*/
+    /*box-shadow: 0 0 8px #1e7bd1;
+    border-radius: 10px;*/
+    box-shadow: 0 0 20px #000000;
+    border-radius: 10px;
 }
 
 .btn:hover {
     transform: scale(1.1);
-    font-size: 1.1rem;
+    font-size: 3vh;
 }
 
 .main {
@@ -67,7 +58,49 @@
 }
 
 .title {
-    color: #fff;
+    color: #5aa6bd;
+    padding: 10px;
+    margin: 5px;
     font-size: 2rem;
     text-align: center;
+    font-weight: bold;
+}
+
+.input {
+    background: #03142430;
+    padding: 10px;
+    margin: 5px;
+    box-shadow: 0 0 20px #000000;
+    border-radius: 50px;
+    font-size: 1rem;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.lockin {
+    background: #03142430;
+    box-shadow: 0 0 20px #000000;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    width: 40%;
+}
+
+.inputRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 3vh;
+}
+
+.kontejnr {
+    display: flex;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #05122D, #0C1444, #1C1854, #2E145D, #261342);
 }

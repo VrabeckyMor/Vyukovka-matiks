@@ -1,17 +1,17 @@
 'use client';
 
-import styles from './Home.module.css';
+import styles from '../Home.module.css';
 import React, { useState } from 'react';
-import * as backendCalls from './backendCalls';
+import * as backendCalls from '../backendCalls';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
 
+  const router = useRouter();
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [data, setData] = useState<any>({});
-  const router = useRouter();
 
   if (loggedIn) {
     if (data.profile === 3) {
@@ -23,7 +23,7 @@ export default function Home() {
             <button className={styles.btn} onClick={() => router.push("/priklady")}>PŘÍKLADY</button>
           </aside>
           <main className={styles.main}>
-            <h1 className={styles.title}>ňáký yappování pro gulyho a vojtu o tom jak jsme tohle udělali *žákovský účet*</h1>
+            <h1 className={styles.title}>1 + 1 = 2 *žákovský účet*</h1>
             <p>{JSON.stringify(data)}</p>
           </main>
         </div>
@@ -37,7 +37,7 @@ export default function Home() {
             <button className={styles.btn} onClick={() => router.push("/priklady")}>PŘÍKLADY</button>
           </aside>
           <main className={styles.main}>
-            <h1 className={styles.title}>ňáký yappování pro gulyho a vojtu o tom jak jsme tohle udělali *učitelský účet*</h1>
+            <h1 className={styles.title}>1 + 1 = 2 *učitelský účet*</h1>
             <p>{JSON.stringify(data)}</p>
           </main>
         </div>
@@ -51,7 +51,7 @@ export default function Home() {
             <button className={styles.btn} onClick={() => router.push("/priklady")}>PŘÍKLADY</button>
           </aside>
           <main className={styles.main}>
-            <h1 className={styles.title}>ňáký yappování pro gulyho a vojtu o tom jak jsme tohle udělali *adminův účet*</h1>
+            <h1 className={styles.title}>1 + 1 = 2 *adminův účet*</h1>
             {/*<p>{JSON.stringify(data)}</p>*/}
           </main>
         </div>
@@ -66,7 +66,7 @@ export default function Home() {
             <input type="text" placeholder="Uživatelské jméno" className={styles.input} onChange={(e) => setUsername(e.target.value)} />
             <input type="password" placeholder="Heslo" className={styles.input} onChange={(e) => setPassword(e.target.value)} />
           </div>
-            <button className={styles.btn} onClick={() => backendCalls.login(username, password, setLoggedIn, setData)}>PŘIHLÁSIT SE</button>
+          <button className={styles.btn} onClick={() => backendCalls.login(username, password, setLoggedIn, setData)}>PŘIHLÁSIT SE</button>
         </main >
       </div >
     );

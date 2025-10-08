@@ -3,17 +3,18 @@ import { NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
-export async function POST(req: Request) {
-    const { username, password } = await req.json();
+export async function GET(req: Request) {
+    const { userId } = await req.json();
 
     const user = await prisma.user.findUnique({
-        where: { username },
+        where: { id: userId },
     });
 
-    if (!user || user.password !== password) {
+    if (!user) {
         return NextResponse.json({ success: false });
     }
 
-    return NextResponse.json({ success: true, user });
+
+    return NextResponse.json({ user.profile, user.score, user.credits });
 
 }
