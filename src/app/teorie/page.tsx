@@ -17,7 +17,7 @@ export default function Home() {
       <button className={styles.btn} onClick={() => router.push("/priklady")}>PŘÍKLADY</button>
     </aside>
     <main className={styles.main}>
-      <h1 className={styles.title}>1 + 1 = X *adminův účet*</h1>
+      <h1 className={styles.title}>1 + 1 = 2 *adminův účet*</h1>
       {/*<p>{JSON.stringify(data)}</p>*/}
     </main>
   </div>
