@@ -21,7 +21,7 @@
 }
 
 .side:hover {
-    width: 20%;
+    width: 43vh;
 }
 
 .btn {
@@ -58,13 +58,16 @@
 }
 
 .title {
-    color: #a84df3;
+    color: #8ce2e2;
     padding: 10px;
     margin: 5px;
     font-size: 2rem;
     text-align: center;
     font-weight: bold;
 }
+
+/* ↑ To ostatní ↑ */
+/* ↓   Login    ↓ */
 
 .input {
     background: #03142430;
@@ -103,4 +106,13 @@
     justify-content: center;
     align-items: center;
     background: linear-gradient(135deg, #05122D, #0C1444, #1C1854, #2E145D, #261342);
+}
+
+.plz {
+    color: #a84df3;
+    padding: 10px;
+    margin: 5px;
+    font-size: 2rem;
+    text-align: center;
+    font-weight: bold;
 }

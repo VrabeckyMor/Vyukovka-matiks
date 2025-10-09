@@ -61,7 +61,7 @@ export default function Home() {
     return (
       <div className={styles.kontejnr}>
         <main className={styles.lockin}>
-          <h1 className={styles.title}>PROSÍM, PŘIHLAŠTE SE</h1>
+          <h1 className={styles.plz}>PROSÍM, PŘIHLAŠTE SE</h1>
           <div className={styles.inputRow}>
             <input type="text" placeholder="Uživatelské jméno" className={styles.input} onChange={(e) => setUsername(e.target.value)} />
             <input type="password" placeholder="Heslo" className={styles.input} onChange={(e) => setPassword(e.target.value)} />
