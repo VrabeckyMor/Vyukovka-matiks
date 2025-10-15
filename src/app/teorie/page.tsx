@@ -1,25 +1,49 @@
-// Omluvte prosím neostatek komentářů, jde o rychlou ukázku funkčnosti. Omluvte také nepříliš hezký kód, jde o rychlý prototyp. Omluvte ještě také nedodělanou strukturu stránky jedná se pouze o zkušební verzi. Děkuji za pochopení.
 'use client';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import * as backendCalls from '../backendCalls';
-import styles from './home.module.css';
 
-export default function TeoriePage() {
+import React, { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import * as backendCalls from '../backendCalls';
+import styles from '../Home.module.css';
+
+export default function Teorie() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const params = useSearchParams();
+
   const [theory, setTheory] = useState<any>(null);
+  const [topicId, setTopicId] = useState<number>(1);
 
   useEffect(() => {
-    const stored = localStorage.getItem('user');
-    if (!stored) {
-      router.push('/login');
-      return;
-    }
-    const u = JSON.parse(stored);
-    setUser(u);
+    const tid = Number(params.get('topicId')) || 1;
+    setTopicId(tid);
+    backendCalls.fetchTheory(tid, setTheory);
+  }, [params]);
 
-    // Demo fetchData volání - v ostrém provozu bude vracet reálná data z backendu
+  function handleBack() {
+    const saved = localStorage.getItem('currentTopic');
+    if (saved) {
+      const data = JSON.parse(saved);
+      router.push(`/priklady?topicId=${data.topicId}&index=${data.currentExampleIndex}`);
+    } else {
+      router.push('/priklady');
+    }
+  }
+
+  if (!theory) return <p>Načítám teorii...</p>;
+
+  return (
+    <div className={styles.container}>
+      <h1>Teorie — Téma {topicId}</h1>
+      <p>{theory.content}</p>
+
+      <button onClick={handleBack}>Zpět na příklady</button>
+    </div>
+  );
+}
+
+
+
+
+    /*</div>// Demo fetchData volání - v ostrém provozu bude vracet reálná data z backendu
     backendCalls.fetchData(u.id, (data: any) => {
       if (data.theorie) {
         setTheory(data.theorie);
@@ -32,7 +56,7 @@ export default function TeoriePage() {
         });
       }
     });
-  }, [router]);
+  }, ([router]);
 
   if (!user || !theory) return null;
 
@@ -61,7 +85,7 @@ export default function TeoriePage() {
     </div>
   );
 }
-
+*/
 
 
 /* starý model

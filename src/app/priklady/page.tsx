@@ -1,108 +1,59 @@
-// Omluvte prosím neostatek komentářů, jde o rychlou ukázku funkčnosti. Omluvte také nepříliš hezký kód, jde o rychlý prototyp. Omluvte ještě také nedodělanou strukturu stránky jedná se pouze o zkušební verzi. Děkuji za pochopení.
 'use client';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import * as backendCalls from '../backendCalls';
-import styles from '../home.module.css';
 
-export default function PrikladyPage() {
+import React, { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import * as backendCalls from '../backendCalls';
+import styles from '../Home.module.css';
+
+export default function Priklady() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const params = useSearchParams();
+
   const [examples, setExamples] = useState<any[]>([]);
-  const [answers, setAnswers] = useState<{ [key: number]: string }>({});
-  const [feedback, setFeedback] = useState<{ [key: number]: string }>({});
+  const [currentExampleIndex, setCurrentExampleIndex] = useState(0);
+  const [topicId, setTopicId] = useState<number>(1);
+  const [answer, setAnswer] = useState('');
 
   useEffect(() => {
-    const stored = localStorage.getItem('user');
-    if (!stored) {
-      router.push('/login');
-      return;
-    }
-    const u = JSON.parse(stored);
-    setUser(u);
+    const tid = Number(params.get('topicId')) || 1;
+    setTopicId(tid);
+    backendCalls.fetchExamples(tid, setExamples);
+  }, [params]);
 
-    // Demo volání backendu (v ostrém provozu by se fetchovalo z API)
-    backendCalls.fetchData(u.id, (data) => {
-      // pokud by data obsahovala příklady, použijeme je, jinak demo
-      if (data.examples) {
-        setExamples(data.examples);
-      } else {
-        setExamples([
-          {
-            id: 1,
-            question: '5 + 7 = ?',
-            correct: '12',
-            solution: '5 + 7 = 12',
-          },
-          {
-            id: 2,
-            question: '8 + 4 = ?',
-            correct: '12',
-            solution: '8 + 4 = 12',
-          },
-        ]);
-      }
-    });
-  }, [router]);
+  const example = examples[currentExampleIndex];
 
-  const handleCheck = (id: number) => {
-    const answer = answers[id];
-    const example = examples.find((ex) => ex.id === id);
-    if (!example) return;
-
-    if (answer === example.correct) {
-      setFeedback((prev) => ({ ...prev, [id]: 'Správně! +1 XP' }));
-      // Aktualizace bodů a peněz v demo režimu
-      setUser((prev: any) => ({
-        ...prev,
-        xp: prev.xp + 1,
-        penize: prev.penize + 10,
-      }));
+  function checkAnswer() {
+    if (example && answer === example.correctAnswer) {
+      alert('Správně!');
     } else {
-      setFeedback((prev) => ({ ...prev, [id]: `Špatně! Správně je: ${example.solution}` }));
-      setUser((prev: any) => ({
-        ...prev,
-        xp: Math.max(prev.xp - 1, 0), // odečteme XP
-      }));
+      alert(`Špatně! Správná odpověď je ${example.correctAnswer}`);
     }
-  };
+  }
 
-  if (!user || !examples.length) return null;
+  function goToTheory() {
+    const currentTopic = {
+      topicId,
+      currentExampleIndex,
+    };
+    localStorage.setItem('currentTopic', JSON.stringify(currentTopic));
+    router.push(`/teorie?topicId=${topicId}`);
+  }
+
+  if (!example) return <p>Načítám příklady...</p>;
 
   return (
     <div className={styles.container}>
-      <aside className={styles.side}>
-        <h3 className={styles.title}>Uživatel</h3>
-        <p className={styles.plz}>{user.name}</p>
-        <p>Role: {user.role}</p>
-        <p>XP: {user.xp}</p>
-        <p>Peníze: {user.penize}</p>
-      </aside>
+      <h1>Příklady — Téma {topicId}</h1>
+      <p><strong>Otázka:</strong> {example.question}</p>
 
-      <main className={styles.main}>
-        <div style={{ maxWidth: 800, padding: 20 }}>
-          <h1 className={styles.title}>Příklady</h1>
-          {examples.map((ex) => (
-            <div key={ex.id} style={{ marginBottom: 20 }}>
-              <p style={{ color: '#cfeff0', fontSize: '1.2rem' }}>{ex.question}</p>
-              <input
-                type="text"
-                value={answers[ex.id] || ''}
-                onChange={(e) =>
-                  setAnswers((prev) => ({ ...prev, [ex.id]: e.target.value }))
-                }
-                className={styles.input}
-              />
-              <button className={styles.btn} onClick={() => handleCheck(ex.id)}>
-                Zkontrolovat
-              </button>
-              {feedback[ex.id] && (
-                <p style={{ color: '#a84df3', marginTop: '5px' }}>{feedback[ex.id]}</p>
-              )}
-            </div>
-          ))}
-        </div>
-      </main>
+      <input
+        type="text"
+        placeholder="Vaše odpověď"
+        value={answer}
+        onChange={(e) => setAnswer(e.target.value)}
+      />
+      <button onClick={checkAnswer}>Odeslat</button>
+      <button onClick={goToTheory}>Přejít na teorii</button>
     </div>
   );
 }
