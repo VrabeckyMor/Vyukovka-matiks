@@ -1,51 +1,97 @@
-'use client';
+'use client'
 
-import styles from './Home.module.css';
-import React, { useState } from 'react';
-import * as backendCalls from '../backendCalls';
-import { useRouter } from 'next/navigation';
+import { signIn, signUp, signOut, useSession } from '@/lib/auth-client'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
-export default function Home() {
+export default function LoginPage() {
+    const session = useSession()
+    const router = useRouter()
+    const { data, isPending } = useSession()
 
-    const [loggedIn, setLoggedIn] = useState(false);
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [data, setData] = useState<any>({});
-    const router = useRouter();
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [isRegistering, setIsRegistering] = useState(false)
+    const [error, setError] = useState<string | null>(null)
 
-    if (loggedIn&& data?.profile) {
-      localStorage.setItem('user', JSON.stringify(data));
-        if (data.profile === 3) {
-            return (
-                <>
-                    {router.push("/onas")}
-                </>
-            );
-        } else if (data.profile === 2) {
-            return (
-                <>
-                    {router.push("/onas")}
-                </>
-            );
-        } else if (data.profile === 1) {
-            return (
-                <>
-                    {router.push("/onas")}
-                </>
-            );
+    const handleSubmit = async () => {
+        try {
+            setError(null)
+
+            if (isRegistering) {
+                await signUp.email({ email, password, name }) // ✅ name is required
+            } else {
+                await signIn.email({ email, password })
+            }
+
+            setEmail('')
+            setPassword('')
+            setName('')
+
+            // Po přihlášení můžeš redirectnout
+            router.push('../') // nebo kam chceš
+        } catch (err: any) {
+            setError(err?.message || 'Chyba při přihlášení/registraci')
         }
-    } else {
-        return (
-            <div className={styles.kontejnr}>
-                <main className={styles.lockin}>
-                    <h1 className={styles.plz}>PROSÍM, PŘIHLAŠTE SE</h1>
-                    <div className={styles.inputRow}>
-                        <input type="text" placeholder="Uživatelské jméno" className={styles.input} onChange={(e) => setUsername(e.target.value)} />
-                        <input type="password" placeholder="Heslo" className={styles.input} onChange={(e) => setPassword(e.target.value)} />
-                    </div>
-                    <button className={styles.btn} onClick={() => backendCalls.login(username, password, setLoggedIn, setData)}>PŘIHLÁSIT SE</button>
-                </main >
-            </div >
-        );
     }
+
+    if (session) {
+        if (data?.user?.email) {
+            return (
+                <div style={{ padding: '2rem' }}>
+                    <p>Přihlášen jako: <strong>{session.user.email}</strong></p>
+                    <button onClick={() => signOut()}>Odhlásit</button>
+                </div>
+            )
+        }
+    }
+
+    return (
+        <div style={{ padding: '2rem', maxWidth: '400px' }}>
+            <h2>{isRegistering ? 'Registrace' : 'Přihlášení'}</h2>
+
+            {isRegistering && (
+                <input
+                    type="text"
+                    placeholder="Jméno"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    style={{ display: 'block', marginBottom: '1rem', width: '100%' }}
+                />
+            )}
+
+            <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                style={{ display: 'block', marginBottom: '1rem', width: '100%' }}
+            />
+
+            <input
+                type="password"
+                placeholder="Heslo"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                style={{ display: 'block', marginBottom: '1rem', width: '100%' }}
+            />
+
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+
+            <button onClick={handleSubmit} style={{ marginBottom: '1rem' }}>
+                {isRegistering ? 'Registrovat' : 'Přihlásit se'}
+            </button>
+
+            <p style={{ fontSize: '0.9rem' }}>
+                {isRegistering ? 'Už máš účet?' : 'Nemáš ještě účet?'}{' '}
+                <button
+                    onClick={() => setIsRegistering(!isRegistering)}
+                    style={{ textDecoration: 'underline' }}
+                >
+                    {isRegistering ? 'Přihlásit se' : 'Registrovat'}
+                </button>
+            </p>
+        </div>
+    )
 }

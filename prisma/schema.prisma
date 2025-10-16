@@ -14,12 +14,73 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  password  String
-  profile   Int
-  score     Int      @default(0)
-  credits   Int      @default(0)
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String? // pokud používáš email+heslo
+  name      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  emailVerified Boolean   @default(false)
+  image         String?
+
+  @@map("user")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String? //tyhlety 3 jsou pro OAuth
+  provider          String? //defaultně byly bez otazníků
+  providerAccountId String? //ale jelikož nepoužíváme OAuth, tak je můžeme mít nullable
+  access_token      String?
+  refresh_token     String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+
+  user User @relation(fields: [userId], references: [id])
+
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@unique([provider, providerAccountId])
+  @@map("account")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  expiresAt DateTime
+  token     String   @unique
+
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+
+  @@map("session")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@map("verification")
 }
