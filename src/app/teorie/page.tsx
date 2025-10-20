@@ -8,24 +8,15 @@ import styles from '../Home.module.css';
 export default function Teorie() {
   const router = useRouter();
   const params = useSearchParams();
-
+  const topicId = Number(params.get('topicId')) || 1;
   const [theory, setTheory] = useState<any>(null);
-  const [topicId, setTopicId] = useState<number>(1);
 
   useEffect(() => {
-    const tid = Number(params.get('topicId')) || 1;
-    setTopicId(tid);
-    backendCalls.fetchTheory(tid, setTheory);
-  }, [params]);
+    backendCalls.fetchTheory(topicId, setTheory);
+  }, [topicId]);
 
   function handleBack() {
-    const saved = localStorage.getItem('currentTopic');
-    if (saved) {
-      const data = JSON.parse(saved);
-      router.push(`/priklady?topicId=${data.topicId}&index=${data.currentExampleIndex}`);
-    } else {
-      router.push('/priklady');
-    }
+    router.push(`/priklady?topicId=${topicId}`);
   }
 
   if (!theory) return <p>Načítám teorii...</p>;
@@ -39,6 +30,9 @@ export default function Teorie() {
     </div>
   );
 }
+
+
+
 
 
 

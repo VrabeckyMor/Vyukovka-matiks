@@ -2,117 +2,98 @@
 
     
 Poznámky k projektu:
-- V page.tsx teorie a priklady ještě není vše hotovo, zatím to nefunguje.
-- Do backendu je potřeba dodělat funkce z Frontendu.
-- Tj. 
-- V schema.prisma je potřeba přidat model:
-    -Topic:
-     model Topic {
-     id        Int       @id @default(autoincrement())
-     title     String
-     theory    Theory?  
-     examples  Example[]
-    }
-    -Example:
-    model Example {
-     id        Int       @id @default(autoincrement())
-     topicId   Int      @unique
-     topic     Topic     @relation(fields: [topicId], references: [id])
-     question  String
-     correctAnswer    String
-     explanation  String?
-     difficulty Int
-    }
-    -Theory:
-    model Theory {
-     id       Int       @id @default(autoincrement())
-     topicId  Int       @unique
-     content  String
-     topic    Topic     @relation(fields: [topicId], references: [id])
-    }
+Frontend – co dělá
 
-- do api/teorie/route.ts dodělat :
-     import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+1.Výběr tématu
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const topicId = Number(searchParams.get('topicId'));
+  Uživatel si může vybrat téma (např. sčítání do 20, odčítání do 20, násobení).
 
-  const theory = await prisma.theory.findUnique({
-    where: { topicId },
-  });
+  Podle vybraného tématu se generují náhodné matematické příklady.
 
-  if (!theory) {
-    return NextResponse.json({ error: 'Theory not found' }, { status: 404 });
-  }
+2.Procvičování příkladů
 
-  return NextResponse.json(theory);
-}
+  Zobrazuje se aktuální příklad a input pro zadání odpovědi.
 
-- do api/priklady/route.ts dodělat:
-   import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+  Po odeslání odpovědi:
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const topicId = Number(searchParams.get('topicId'));
+    Správná odpověď → přičtou se body a peníze.
 
-  const examples = await prisma.example.findMany({
-    where: { topicId },
-  });
+    Špatná odpověď → odečtou se body, peníze zůstávají.
 
-  return NextResponse.json(examples);
-}
+  Po 20 vyřešených příkladech se zeptá, zda chce uživatel pokračovat.
+
+  Aktuální příklad se zachovává při přechodu na stránku teorie a zpět.
+
+3.Teorie k tématu
+
+  Uživatel může kdykoli přejít na stránku teorie.
+
+  Text teorie se načítá z backendu podle topicId.
+
+  Po návratu z teorie je stále zobrazen stejný příklad.
+
+4.Uživatelský stav
+
+  Body a peníze jsou zobrazeny a aktualizovány podle odpovědí.
+
+  Stav se ukládá do localStorage pro zachování aktuálního příkladu.
+
+5.UI komponenty
+
+  Select pro výběr tématu.
+
+  Zobrazení bodů a peněz.
+
+  Otázka + input pro odpověď.
+
+  Tlačítka: Odeslat odpověď, Nový příklad, Přejít na teorii.
+    
 
 
-- do backendCalls.ts dodělat:
+Backend – co je potřeba zajistit
 
-// src/app/backendCalls.tsx
-export async function fetchTheory(topicId: number, setTheory: Function) {
-  try {
-    const res = await fetch(`/api/theory?topicId=${topicId}`);
-    if (!res.ok) throw new Error('Chyba při načítání teorie');
-    const data = await res.json();
-    setTheory(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
+  Backend slouží pouze pro persistentní data a texty teorie, příklady se generují frontendem.
 
-export async function fetchExamples(topicId: number, setExamples: Function) {
-  try {
-    const res = await fetch(`/api/examples?topicId=${topicId}`);
-    if (!res.ok) throw new Error('Chyba při načítání příkladů');
-    const data = await res.json();
-    setExamples(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
+Požadované endpointy:
+
+  GET /api/user
+
+    Vrací JSON s aktuálním stavem uživatele:
+
+    { "id": "123", "points": 50, "money": 20 }
 
 
-- Zatím udělán jen teoretický návrh s funkcemi, které jsou ve frontendu ale zatím ne v backendu
-- Zítra dodělám konkrérní příklady a teorii a pak už by to mělo fungovat.
-- Prosím o dodělání backendu, pokud byste na něco přišli, dejte vědět.
--hlavní funkce a jejich ukoly:
-- login()
-    Přihlásí uživatele, uloží user do localStorage, nastaví stav přihlášení.
--fetchUserData()
-    Načte aktuální stav uživatele z backendu (XP, peníze, progress).
--fetchExamples()
-    Vrátí seznam příkladů pro dané téma.
--submitAnswer()
-    Odešle odpověď uživatele.
-    Vrátí, zda byla odpověď správná, správné řešení a postup.
-    Aktualizuje XP a peníze a uloží nový stav uživatele.
--fetchTheory()
-    Načte teorii pro dané téma.
+  POST /api/user
 
--My nemáme vube lib??? jsem teď zjistil jako že tam není?
+    Aktualizuje body a peníze uživatele:
 
-- Data (priklady a teorii) jsem myslel ze budeme dělat do souboru prisma/seed.ts a pak to tam nahrát přes npx prisma db seed
-- Zatím jsem to neskoušel jen podle mě by to mělo fungovat teď jsou zatím k tomu pripravené page teorie a priklady
+    { "id": "123", "points": 60, "money": 25 }
 
+
+  GET /api/theory?topicId=X
+
+    Vrací text teorie pro konkrétní téma:
+
+    { "topicId": 1, "content": "Sčítání do 20: sčítáme dvě čísla dohromady..." }
+
+Logika backendu:
+
+  Ukládat a načítat stav uživatele (body, peníze).
+
+  Poskytovat texty teorie pro jednotlivá témata podle topicId.
+
+  Backend negeneruje příklady, to řeší frontend.
+
+
+
+Shrnutí spolupráce frontend ↔ backend
+
+  Frontend: generuje příklady, vyhodnocuje odpovědi, aktualizuje stav uživatele, umožňuje prohlížet teorii.
+
+  Backend: uchovává persistentní data (body a peníze) a poskytuje texty teorie.
+
+  Komunikace: přes API volání GET a POST ve frontendových funkcích backendCalls.getUserData(), backendCalls.updateUserData(), backendCalls.fetchTheory().
+
+Takhe jsem to nějak myslel frontend by měl být funkční. Potřeba dodélat backend... Zatím voláme přes backendCalls!
 
 */
