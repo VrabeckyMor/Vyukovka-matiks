@@ -16,7 +16,7 @@ datasource db {
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
-  password  String? // pokud používáš email+heslo
+  password  String?
   name      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -32,9 +32,9 @@ model User {
 model Account {
   id                String  @id @default(cuid())
   userId            String
-  type              String? //tyhlety 3 jsou pro OAuth
-  provider          String? //defaultně byly bez otazníků
-  providerAccountId String? //ale jelikož nepoužíváme OAuth, tak je můžeme mít nullable
+  type              String @default("email") //tyhlety 3 jsou pro OAuth
+  provider          String @default("email")//defaultně byly bez otazníků
+  providerAccountId String @default("1")//ale jelikož nepoužíváme OAuth, tak je můžeme mít nullable, nefunguje, zkusíme default
   access_token      String?
   refresh_token     String?
   expires_at        Int?

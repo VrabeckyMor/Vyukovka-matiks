@@ -5,9 +5,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
-    const session = useSession()
+    const { data: session, isPending } = useSession() // sjednocené volání hooku
     const router = useRouter()
-    const { data, isPending } = useSession()
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -20,7 +19,7 @@ export default function LoginPage() {
             setError(null)
 
             if (isRegistering) {
-                await signUp.email({ email, password, name }) // ✅ name is required
+                await signUp.email({ email, password, name })
             } else {
                 await signIn.email({ email, password })
             }
@@ -29,22 +28,18 @@ export default function LoginPage() {
             setPassword('')
             setName('')
 
-            // Po přihlášení můžeš redirectnout
-            router.push('../') // nebo kam chceš
+            router.push('../')
         } catch (err: any) {
             setError(err?.message || 'Chyba při přihlášení/registraci')
         }
     }
 
-    if (session) {
-        if (data?.user?.email) {
-            return (
-                <div style={{ padding: '2rem' }}>
-                    <p>Přihlášen jako: <strong>{session.user.email}</strong></p>
-                    <button onClick={() => signOut()}>Odhlásit</button>
-                </div>
-            )
-        }
+    if (session && session.user?.email) {
+        return (
+            <div style={{ padding: '2rem' }}>
+                <button onClick={() => signOut()}>Odhlásit</button>
+            </div>
+        )
     }
 
     return (
