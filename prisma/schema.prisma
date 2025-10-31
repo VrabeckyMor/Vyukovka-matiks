@@ -30,32 +30,20 @@ model User {
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String @default("email") //tyhlety 3 jsou pro OAuth
-  provider          String @default("email")//defaultně byly bez otazníků
-  providerAccountId String @default("1")//ale jelikož nepoužíváme OAuth, tak je můžeme mít nullable, nefunguje, zkusíme default
-  access_token      String?
-  refresh_token     String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-
-  user User @relation(fields: [userId], references: [id])
-
+  id                    String    @id
   accountId             String
   providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
   idToken               String?
   accessTokenExpiresAt  DateTime?
   refreshTokenExpiresAt DateTime?
+  scope                 String?
   password              String?
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
-
-  @@unique([provider, providerAccountId])
+  createdAt             DateTime
+  updatedAt             DateTime
   @@map("account")
 }
 

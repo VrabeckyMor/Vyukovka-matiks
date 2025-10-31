@@ -5,7 +5,7 @@ import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
 export const auth = betterAuth({
-  database: prismaAdapter(prisma, { provider: "sqlite" }), // nebo postgresql apod.
+  database: prismaAdapter(prisma, { provider: "sqlite" }),
   emailAndPassword: {
     enabled: true,
   },

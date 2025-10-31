@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import * as backendCalls from '../backendCalls';
 import styles from '../Home.module.css';
 
 export default function Teorie() {
@@ -10,10 +9,6 @@ export default function Teorie() {
   const params = useSearchParams();
   const topicId = Number(params.get('topicId')) || 1;
   const [theory, setTheory] = useState<any>(null);
-
-  useEffect(() => {
-    backendCalls.fetchTheory(topicId, setTheory);
-  }, [topicId]);
 
   function handleBack() {
     router.push(`/priklady?topicId=${topicId}`);

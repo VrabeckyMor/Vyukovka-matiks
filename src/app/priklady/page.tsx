@@ -1,9 +1,33 @@
 'use client';
 
+import styles from '../Home.module.css';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+export default function Priklady() {
+  const router = useRouter();
+  return (
+    <div className={styles.container}>
+      <aside className={styles.side}>
+        <button className={styles.btn} onClick={() => router.push("/onas")}>O NÁS</button>
+        <button className={styles.btn} onClick={() => router.push("/teorie")}>TEORIE</button>
+        <button className={styles.btn} onClick={() => router.push("/priklady")}>PŘÍKLADY</button>
+      </aside>
+      <main className={styles.main}>
+        <h1 className={styles.title}>
+          Tady bude sekce s příklady. Brzy doplníme!
+        </h1>
+      </main>
+    </div>
+  );
+}
+
+
+/*'use client';
+
 import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import styles from '../Home.module.css';
-import * as backendCalls from '../backendCalls'; // namespace import
 
 type Example = { question: string; correctAnswer: string };
 type UserData = { id: string; points: number; money: number };
@@ -174,4 +198,4 @@ export default function Priklady() {
       </div>
     </div>
   );
-}
+}*/

@@ -1,51 +1,27 @@
 'use client';
 
 import styles from './Home.module.css';
-import React, { useState } from 'react';
-import * as backendCalls from './backendCalls';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
 
-    const [loggedIn, setLoggedIn] = useState(false);
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [data, setData] = useState<any>({});
-    const router = useRouter();
+  return (
+    <div className={styles.container}>
+      <aside className={styles.side}>
+        <button className={styles.btn} onClick={() => router.push("/onas")}>O NÁS</button>
+        <button className={styles.btn} onClick={() => router.push("/teorie")}>TEORIE</button>
+        <button className={styles.btn} onClick={() => router.push("/priklady")}>PŘÍKLADY</button>
+      </aside>
 
-    if (loggedIn&& data?.profile) {
-      localStorage.setItem('user', JSON.stringify(data));
-        if (data.profile === 3) {
-            return (
-                <>
-                    {router.push("/onas")}
-                </>
-            );
-        } else if (data.profile === 2) {
-            return (
-                <>
-                    {router.push("/onas")}
-                </>
-            );
-        } else if (data.profile === 1) {
-            return (
-                <>
-                    {router.push("/onas")}
-                </>
-            );
-        }
-    } else {
-        return (
-            <div className={styles.kontejnr}>
-                <main className={styles.lockin}>
-                    <h1 className={styles.plz}>PROSÍM, PŘIHLAŠTE SE</h1>
-                    <div className={styles.inputRow}>
-                        <input type="text" placeholder="Uživatelské jméno" className={styles.input} onChange={(e) => setUsername(e.target.value)} />
-                        <input type="password" placeholder="Heslo" className={styles.input} onChange={(e) => setPassword(e.target.value)} />
-                    </div>
-                    <button className={styles.btn} onClick={() => backendCalls.login(username, password, setLoggedIn, setData)}>PŘIHLÁSIT SE</button>
-                </main >
-            </div >
-        );
-    }
+      <main className={styles.main}>
+          <h1 className={styles.title}>
+            Vítejte! 
+            Tohle je úvodní stránka výukové aplikace pro žáky základních škol zaměřené na matematiku.
+          </h1>
+        
+      </main>
+    </div>
+  );
 }
