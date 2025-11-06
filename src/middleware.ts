@@ -3,6 +3,7 @@ import { getSessionCookie } from 'better-auth/cookies'
 
 export async function middleware(request: NextRequest) {
   const session = getSessionCookie(request)
+  console.log('Middleware Session:', session);
 
   const isProtected = !request.nextUrl.pathname.startsWith('/login')
 
