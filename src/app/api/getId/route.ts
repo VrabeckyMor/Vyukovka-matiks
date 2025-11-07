@@ -19,7 +19,6 @@ export async function GET(req: Request) {
     const data = await getUserAccount({ cookies: { 'better-auth-session': rawToken } });
     return new Response(JSON.stringify(data), { status: 200 });
   } catch (error) {
-    console.error('API Route Error:', error.message);
-    return new Response(JSON.stringify({ error: error.message }), { status: 401 });
+    return new Response(JSON.stringify({ error: "gg bro" }), { status: 401 });
   }
 }

@@ -9,7 +9,7 @@ export default function Priklady() {
   const [answer, setAnswer] = useState("");
   const [correct, setCorrect] = useState("");
   const [priklad, setPriklad] = useState("");
-  const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState("");
   const [score, setScore] = useState(0);
 
   function generatePriklad() {
@@ -33,7 +33,7 @@ export default function Priklady() {
     fetchUserAccount();
   }, []);
 
-  async function changeScore(id, action) {
+  async function changeScore(id:String, action:String) {
     await fetch('/api/data', {
       method: 'POST',
       headers: {
@@ -44,7 +44,7 @@ export default function Priklady() {
     initializeScore(userId);
   }
 
-  async function initializeScore(id) {
+  async function initializeScore(id:String) {
     if (!id) return;
 
     try {

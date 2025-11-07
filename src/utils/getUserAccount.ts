@@ -43,7 +43,6 @@ export async function getUserAccount(req: any) {
       userId: session.user.id,
     };
   } catch (error) {
-    console.error('getUserAccount Error:', error.message);
     throw error;
   }
 }

@@ -9,7 +9,7 @@ export default function Teorie() {
 
   return (
     <div className={styles.container}>
-      
+      <h1 className={styles.title}>Ve vývoji</h1>
     </div>
   );
 }
