@@ -72,3 +72,8 @@ model Verification {
 
   @@map("verification")
 }
+
+model Score {
+  id    String  @id
+  score Int     @default(0)
+}

@@ -25,7 +25,6 @@ export default function Priklady() {
       const data = await response.json();
       setUserId(data.userId);
     }
-    
 
     fetchUserAccount();
   }, []);
