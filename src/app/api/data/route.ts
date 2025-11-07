@@ -3,20 +3,37 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function GET(req: Request) {
-    const body = await req.json();
-    const id = body.id;
+    try {
+        const { searchParams } = new URL(req.url);
+        const id = searchParams.get('id');
 
-    if (!id) {
-        return new Response(JSON.stringify({ error: 'Missing id in request body' }), { status: 400 });
+        if (!id) {
+            return new Response(JSON.stringify({ error: 'Missing id parameter' }), { 
+                status: 400,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        const score = await prisma.score.upsert({
+            where: { id },
+            update: {},
+            create: { 
+                id,
+                score: 0  // Inicializace score na 0
+            },
+        });
+
+        return new Response(JSON.stringify({ score: score.score }), { 
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    } catch (error) {
+        console.error('GET Error:', error);
+        return new Response(JSON.stringify({ error: 'Internal server error' }), { 
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+        });
     }
-
-    const score = await prisma.score.upsert({
-        where: { id },
-        update: {},
-        create: { id },
-    });
-
-    return new Response(JSON.stringify(score), { status: 200 });
 }
 
 export async function POST(req: Request) {

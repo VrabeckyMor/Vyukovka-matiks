@@ -10,6 +10,7 @@ export default function Priklady() {
   const [correct, setCorrect] = useState("");
   const [priklad, setPriklad] = useState("");
   const [userId, setUserId] = useState(null);
+  const [score, setScore] = useState(0);
 
   function generatePriklad() {
     const a = Math.floor(Math.random() * 50) + 1;
@@ -24,10 +25,44 @@ export default function Priklady() {
       const response = await fetch('/api/getId');
       const data = await response.json();
       setUserId(data.userId);
+      if (data.userId) {
+        await initializeScore(data.userId);
+      }
     }
 
     fetchUserAccount();
   }, []);
+
+  async function changeScore(id, action) {
+    await fetch('/api/data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id, action }),
+    });
+    initializeScore(userId);
+  }
+
+  async function initializeScore(id) {
+    if (!id) return;
+
+    try {
+        const response = await fetch(`/api/data?id=${id}`);
+        
+        if (!response.ok) {
+            console.error('Failed to fetch score:', response.status);
+            return;
+        }
+
+        const data = await response.json();
+        if (data && typeof data.score === 'number') {
+            setScore(data.score);
+        }
+    } catch (error) {
+        console.error('Error initializing score:', error);
+    }
+}
 
   return (
     <div className={styles.container}>
@@ -37,17 +72,24 @@ export default function Priklady() {
         <button className={styles.btn} onClick={() => router.push("/priklady")}>PŘÍKLADY</button>
       </aside>
       <main className={styles.main}>
-        <h1 className={styles.title}>{userId}</h1>
-        <h1 className={styles.title}>{priklad}
-        </h1><br />
+        <div className={styles.topnav}>
+          <h1 className={styles.title}>skóre: {score}</h1><br />
+          <h1 className={styles.title}>{priklad}
+          </h1>
+        </div>
         <input className={styles.input} value={answer} onChange={(e) => setAnswer(e.target.value)}></input>
         <button className={styles.btn} onClick={() => {
           if (answer === correct) {
             alert("Správně!");
+            changeScore(userId, "increase");
+            initializeScore(userId);
             generatePriklad();
             setAnswer("");
           } else {
             alert("Špatně, zkus to znovu.");
+            changeScore(userId, "decrease");
+            initializeScore(userId);
+            setAnswer("");
           }
         }}>Odeslat</button>
       </main>
