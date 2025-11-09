@@ -5,6 +5,26 @@
   --foreground: #171717;
 }
 
+html[data-theme="light"] {
+  --background: linear-gradient(135deg, #93cec3, #58b6a6, #29c296, #1aa780);
+  --container-bg: linear-gradient(135deg, #93cec3, #58b6a6, #29c296, #1aa780);
+  --foreground: #004e5c;
+  --side-bg: #008b85;
+  --btn-bg: #015b6b;
+  --btn-color: #ffffff;
+  --title-color: #004e5c;
+}
+
+html[data-theme="dark"] {
+  --background: linear-gradient(135deg, #05122D, #0C1444, #1C1854, #2E145D, #261342);
+  --container-bg: linear-gradient(135deg, #05122D, #0C1444, #1C1854, #2E145D, #261342);
+  --foreground: #8ce2e2;
+  --side-bg: #031424;
+  --btn-bg: #000536;
+  --btn-color: #a84df3;
+  --title-color: #8ce2e2;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
