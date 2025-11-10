@@ -46,7 +46,7 @@ export default function LoginPage() {
 
     return (
         <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ backgroundColor: '#00000035', padding: '10vh 12vh', width: '75vh', borderRadius: '30px' }}>
+            <div style={{ backgroundColor: '#22222246', padding: '10vh 12vh', width: '75vh', borderRadius: '30px' }}>
                 <h2 style={{ textAlign: 'center', fontSize: '5vh', fontWeight: 'bold', marginBottom: '2vh' }}>{isRegistering ? 'REGISTRACE' : 'PŘIHLÁŠENÍ'}</h2>
 
                 {isRegistering && (

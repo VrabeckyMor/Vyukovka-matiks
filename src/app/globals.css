@@ -6,13 +6,15 @@
 }
 
 html[data-theme="light"] {
-  --background: linear-gradient(135deg, #93cec3, #58b6a6, #29c296, #1aa780);
-  --container-bg: linear-gradient(135deg, #93cec3, #58b6a6, #29c296, #1aa780);
-  --foreground: #004e5c;
-  --side-bg: #008b85;
-  --btn-bg: #015b6b;
-  --btn-color: #ffffff;
-  --title-color: #004e5c;
+  --background: hsl(182, 94%, 86%);
+  --container-bg: hsl(182, 94%, 86%);
+  --foreground: #ffffff;
+  --side-bg: #1b68c0;
+  --btn-bg: #002169;
+  --btn-color: hsl(182, 94%, 86%);
+  --btn-shadow: 5px 5px 20px #000000;
+  --aside-shadow: 5px 5px 24px #000000;
+  --title-color: #002169;
 }
 
 html[data-theme="dark"] {
@@ -22,7 +24,35 @@ html[data-theme="dark"] {
   --side-bg: #031424;
   --btn-bg: #000536;
   --btn-color: #a84df3;
+  --btn-shadow: 5px 5px 20px #000000;
+  --aside-shadow: 5px 5px 24px #000000;
   --title-color: #8ce2e2;
+}
+
+html[data-theme="hacker"] {
+  --background: #000000;
+  --container-bg: url('hackerBg.gif');
+  --foreground: #00ff00;
+  --side-bg: #000000;
+  --btn-bg: #000000;
+  --btn-shadow: 0 0 13px #00ff00;
+  --aside-shadow: 0 0 24px #00ff00;
+  --btn-color: #00ff00;
+  --title-color: #00ff00;
+}
+
+html[data-theme="maty"] {
+  --background: linear-gradient(135deg, #E40303, #FF8C00, #FFED00, #008026, #004CFF, #732982);
+  --container-bg: linear-gradient(135deg, #E40303, #FF8C00, #FFED00, #008026, #004CFF, #732982);
+  --foreground: #ffffff;
+  --side-bg: #ff00ff;
+  --btn-bg: url('gay.jpg');
+  --btn-bg-size: 25vh;
+  --btn-border: 8px solid #ff6fff;
+  --btn-shadow: 5px 5px 20px #000000ab;
+  --aside-shadow: 5px 5px 24px #ff00ffc2;
+  --btn-color: #fa20fa;
+  --title-color: #fa20fa;
 }
 
 @theme inline {
