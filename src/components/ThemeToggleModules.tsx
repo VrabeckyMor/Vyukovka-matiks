@@ -13,21 +13,22 @@ export default function ThemeToggleModules() {
       const prefersDark =
         typeof window !== "undefined" &&
         (window.matchMedia as any) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches;
+        window.matchMedia("(prefers-color-scheme: light)").matches;
       const initial = (saved as string) ?? (prefersDark ? "dark" : "light");
       applyTheme(initial);
       setTheme(initial);
     } catch (e) {
-      // ignore
+
     }
   }, []);
+
+  /** tohle načte poslední theme před zavřením (když jseš tu poprvé tak to dá light) ↑ */
 
   function applyTheme(t: string) {
     const html = document.documentElement;
     html.dataset.theme = t;
   }
 
-  // Left click: cycle light <-> dark; if currently maty/hacker -> go to light
   function handleLeftClick() {
     try {
       if (theme === "maty" || theme === "hacker") {
@@ -42,15 +43,16 @@ export default function ThemeToggleModules() {
         localStorage.setItem("theme", next);
       }
     } catch (e) {
-      // ignore storage errors
     }
   }
 
-  // Right click: if on light/dark -> go to hacker; if on hacker -> maty; if on maty -> hacker
+  //* tohle děla left-click switch a když je to na jeden z right-click switch modů tak to dá light ↑ */
+
   function handleContextMenu(e: React.MouseEvent) {
     e.preventDefault();
     try {
       if (theme === "hacker") {
+
         applyTheme("maty");
         setTheme("maty");
         localStorage.setItem("theme", "maty");
@@ -59,16 +61,15 @@ export default function ThemeToggleModules() {
         setTheme("hacker");
         localStorage.setItem("theme", "hacker");
       } else {
-        // light or dark -> go to hacker
         applyTheme("hacker");
         setTheme("hacker");
         localStorage.setItem("theme", "hacker");
       }
     } catch (err) {
-      // ignore storage errors
     }
   }
 
+  /** tohle dělá že right-click switch a když je to jeden z left-click módů tak to dá hacker ↑ */
   const emoji = theme === "dark" ? "🌙" : theme === "hacker" ? "🧑🏻‍💻" : theme === "maty" ? "🌈" : "☀️";
 
   return (
@@ -76,7 +77,7 @@ export default function ThemeToggleModules() {
       aria-label={`Toggle theme (current: ${theme})`}
       onClick={handleLeftClick}
       onContextMenu={handleContextMenu}
-      title={`Switch theme (current: ${theme})`}
+      title={`Current theme: ${theme} | Left-click to cycle, Right-click for special themes`}
       style={{
         position: "fixed",
         top: 12,
@@ -84,7 +85,7 @@ export default function ThemeToggleModules() {
         padding: "6px 10px",
         borderRadius: 8,
         border: "none",
-        background: "rgba(0,0,0,0.15)",
+        background: "rgba(0, 0, 0, 0.15)",
         color: "white",
         cursor: "pointer",
         zIndex: 9999,
@@ -94,3 +95,5 @@ export default function ThemeToggleModules() {
     </button>
   );
 }
+
+/* tohle dělá tlačítko na přepínání módů ↑ */

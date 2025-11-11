@@ -31,7 +31,7 @@ html[data-theme="dark"] {
 
 html[data-theme="hacker"] {
   --background: #000000;
-  --container-bg: url('hackerBg.gif');
+  --container-bg: url('/hackerBg.gif');
   --foreground: #00ff00;
   --side-bg: #000000;
   --btn-bg: #000000;
@@ -46,7 +46,7 @@ html[data-theme="maty"] {
   --container-bg: linear-gradient(135deg, #E40303, #FF8C00, #FFED00, #008026, #004CFF, #732982);
   --foreground: #ffffff;
   --side-bg: #ff00ff;
-  --btn-bg: url('gay.jpg');
+  --btn-bg: url('/gay.jpg');
   --btn-bg-size: 25vh;
   --btn-border: 8px solid #ff6fff;
   --btn-shadow: 5px 5px 20px #000000ab;

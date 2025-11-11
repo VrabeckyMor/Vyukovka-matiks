@@ -17,12 +17,17 @@
     color: var(--title-color);
     padding: 10px;
     margin: 5px;
-    font-size: 2rem;
+    font-size: 4vh;
     text-align: center;
     font-weight: bold;
 }
 
 .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+
     position: fixed;
     width: 25vh;
     position: relative;
@@ -36,16 +41,23 @@
     font-weight: bold;
     transition: 0.3s;
     box-shadow: var(--btn-shadow);
-    /* support both color and image backgrounds from theme variables */
     background-position: center;
     background-repeat: no-repeat;
     background-size: var(--btn-bg-size, auto);
     border-radius: 10px;
-    /* theme-provided border (e.g. --btn-border) */
     border: var(--btn-border, none);
-    /* keep background image from painting over the border */
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
+}
+
+/* Icon used near the cookie title */
+.headerImg {
+    width: 4vh;
+    height: auto;
+    margin-left: 0.8rem;
+    vertical-align: middle;
+    display: inline-block;
+    border-radius: 6px;
 }
 
 .btn:hover {
