@@ -50,7 +50,13 @@
     background-clip: padding-box;
 }
 
-/* Icon used near the cookie title */
+.btn:hover {
+    padding: 2vh;
+    width: 27vh;
+    font-size: 3.5vh;
+
+}
+
 .headerImg {
     width: 4vh;
     height: auto;
@@ -59,14 +65,6 @@
     display: inline-block;
     border-radius: 6px;
 }
-
-.btn:hover {
-    padding: 2vh;
-    width: 27vh;
-    font-size: 3.5vh;
-
-}
-
 
 .side {
     background-color: var(--side-bg);
@@ -91,4 +89,51 @@
 .side:hover .btn {
     transform: scale(1.15);
     margin: 2.1vh;
+}
+
+@media (max-width: 80vh) {
+    .container {
+        flex-direction: column;
+    }
+
+    .main {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .title {
+        font-size: 5.5vw;
+        margin: 10vw;
+        text-align: justify;
+    }
+
+    .side {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 1rem 0.5rem;
+        justify-content: center;
+    }
+
+    .side:hover {
+        width: 100%;
+    }
+
+    .side .btn {
+        margin: 1vh;
+    }
+
+    .side:hover .btn {
+        transform: scale(1);
+        margin: 1vh;
+    }
+
+    .btn {
+        position: relative;
+        width: 28vw;
+        font-size: 3vw;
+    }
 }
