@@ -80,8 +80,8 @@ export default function ThemeToggleModules() {
       title={`Current theme: ${theme} | Left-click to cycle, Right-click for special themes`}
       style={{
         position: "fixed",
-        top: 12,
-        right: 12,
+        top: "12px",
+        right: "12px",
         padding: "6px 10px",
         borderRadius: 8,
         border: "none",

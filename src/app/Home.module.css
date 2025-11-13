@@ -126,14 +126,10 @@
         margin: 1vh;
     }
 
-    .side:hover .btn {
-        transform: scale(1);
-        margin: 1vh;
-    }
 
     .btn {
         position: relative;
-        width: 28vw;
-        font-size: 3vw;
+       padding: 2vw auto;
+        font-size: 5vw;
     }
 }

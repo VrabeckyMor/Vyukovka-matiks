@@ -33,7 +33,7 @@ export default function Priklady() {
     fetchUserAccount();
   }, []);
 
-  async function changeScore(id:String, action:String) {
+  async function changeScore(id: String, action: String) {
     await fetch('/api/data', {
       method: 'POST',
       headers: {
@@ -44,25 +44,25 @@ export default function Priklady() {
     initializeScore(userId);
   }
 
-  async function initializeScore(id:String) {
+  async function initializeScore(id: String) {
     if (!id) return;
 
     try {
-        const response = await fetch(`/api/data?id=${id}`);
-        
-        if (!response.ok) {
-            console.error('Failed to fetch score:', response.status);
-            return;
-        }
+      const response = await fetch(`/api/data?id=${id}`);
 
-        const data = await response.json();
-        if (data && typeof data.score === 'number') {
-            setScore(data.score);
-        }
+      if (!response.ok) {
+        console.error('Failed to fetch score:', response.status);
+        return;
+      }
+
+      const data = await response.json();
+      if (data && typeof data.score === 'number') {
+        setScore(data.score);
+      }
     } catch (error) {
-        console.error('Error initializing score:', error);
+      console.error('Error initializing score:', error);
     }
-}
+  }
 
   return (
     <div className={styles.container}>
@@ -72,27 +72,37 @@ export default function Priklady() {
         <button className={styles.btn} onClick={() => router.push("/priklady")}>PŘÍKLADY</button>
       </aside>
       <main className={styles.main}>
-        <div className={styles.topnav}>
-          <h1 className={styles.title}>skóre: {score}</h1><br />
-          <h1 className={styles.title}>{priklad}
-          </h1>
+        <div style={{
+          width: '100%',
+          height: '100%',
+          textAlign: 'center',
+          alignItems: 'center',
+          justifyContent: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+        }}>
+          <h1 className={styles.title}>SKÓRE: {score}</h1>
+          <div style={{alignItems: 'center', display: 'flex', flexDirection: 'row', gap: '2vh' }}>
+            <h1 className={styles.title}>{priklad}
+            </h1>
+            <input style={{ display: 'block', fontSize: '2.5vh', width: '50%', backgroundColor: '#0085855e', padding: '1vh', borderRadius: '12px', border: '2px solid #00000042' }} value={answer} onChange={(e) => setAnswer(e.target.value)}></input>
+          </div>
+          <button className={styles.btn} onClick={() => {
+            if (answer === correct) {
+              alert("Správně!");
+              changeScore(userId, "increase");
+              initializeScore(userId);
+              generatePriklad();
+              setAnswer("");
+            } else {
+              alert("Špatně, zkus to znovu.");
+              changeScore(userId, "decrease");
+              initializeScore(userId);
+              setAnswer("");
+            }
+          }}>Odeslat</button>
         </div>
-        <input className={styles.input} value={answer} onChange={(e) => setAnswer(e.target.value)}></input>
-        <button className={styles.btn} onClick={() => {
-          if (answer === correct) {
-            alert("Správně!");
-            changeScore(userId, "increase");
-            initializeScore(userId);
-            generatePriklad();
-            setAnswer("");
-          } else {
-            alert("Špatně, zkus to znovu.");
-            changeScore(userId, "decrease");
-            initializeScore(userId);
-            setAnswer("");
-          }
-        }}>Odeslat</button>
-      </main>
-    </div>
+      </main >
+    </div >
   );
 }
