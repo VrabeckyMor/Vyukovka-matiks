@@ -27,8 +27,8 @@ export default function LoginPage() {
             setEmail('')
             setPassword('')
             setName('')
-
             router.push('../')
+
         } catch (err: any) {
             setError(err?.message || 'Chyba při přihlášení/registraci')
         }

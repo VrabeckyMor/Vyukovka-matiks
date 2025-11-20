@@ -1,13 +1,46 @@
 'use client';
 
 import styles from './Home.module.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
+import { signIn, signUp, signOut, useSession } from '@/lib/auth-client'
 
 export default function Home() {
   const router = useRouter();
   const [showCookieConsent, setShowCookieConsent] = useState(false);
   const [sepExpanded, setSepExpanded] = useState(false);
+
+  // --------- Login kód ---------
+  const { data: session, isPending } = useSession()
+
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [isRegistering, setIsRegistering] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleSubmit = async () => {
+    try {
+      setError(null)
+
+      if (isRegistering) {
+        await signUp.email({ email, password, name })
+      } else {
+        await signIn.email({ email, password })
+      }
+
+      setEmail('')
+      setPassword('')
+      setName('')
+      router.push('/onas')
+
+    } catch (err: any) {
+      setError(err?.message || 'Chyba při přihlášení/registraci')
+    }
+  }
+  // -----------------------------
+
+
 
   useEffect(() => {
     setShowCookieConsent(true);
@@ -120,14 +153,64 @@ export default function Home() {
         </div>
       )}
 
-  <main style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', minHeight: '60vh' }}>
-        <h1 className={styles.title}>
-          Vítejte!
-        </h1>
-        <h2 className={styles.title} style={{ width: '70vw', textAlign: 'justify' }}>
-          Toto je úvodní stránka výukové aplikace pro žáky základních škol zaměřená na matematiku. Prosím, klikněte na tlačítko LOG IN a přihlašte se vaším učitelským či žákovským účtem pro další postup.
-        </h2>
-        <button className={styles.btn} style={{ margin: '2vh auto' }} onClick={() => router.push("/onas")}>LOG IN</button>
+      <main style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', minHeight: '60vh' }}>
+        {(session && session.user?.email) ? (
+          <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ padding: '2rem' }}>
+              <button onClick={() => signOut()}>Odhlásit</button>
+            </div>
+          </div>
+        ) : (
+          <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ backgroundColor: '#00559b46', padding: '10vh 12vh', width: '75vh', borderRadius: '30px' }}>
+              <h2 style={{ textAlign: 'center', fontSize: '5vh', fontWeight: 'bold', marginBottom: '2vh' }}>{isRegistering ? 'REGISTRACE' : 'PŘIHLÁŠENÍ'}</h2>
+
+              {isRegistering && (
+                <input
+                  type="text"
+                  placeholder="Jméno"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  style={{ display: 'block', fontSize: '2.5vh', marginBottom: '2vh', width: '100%', backgroundColor: '#00000035', padding: '1vh', borderRadius: '12px' }}
+                />
+              )}
+
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                style={{ display: 'block', fontSize: '2.5vh', marginBottom: '2vh', width: '100%', backgroundColor: '#00000035', padding: '1vh', borderRadius: '12px' }}
+              />
+
+              <input
+                type="password"
+                placeholder="Heslo"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                style={{ display: 'block', fontSize: '2.5vh', marginBottom: '2vh', width: '100%', backgroundColor: '#00000035', padding: '1vh', borderRadius: '12px' }}
+              />
+
+              {error && <p style={{ color: 'red' }}>{error}</p>}
+
+              <button onClick={handleSubmit}
+                style={{
+                  marginBottom: '2vh', backgroundColor: '#00000020', padding: '1vh 2vh', borderRadius: '12px', fontSize: '2.5vh', cursor: 'pointer', boxShadow: '3px 3px 10px #000000c0', minWidth: '30vh', display: 'block', margin: '0 auto 2vh auto'
+                }}>
+                {isRegistering ? 'REGISTROVAT' : 'PŘIHLÁSIT SE'}
+              </button>
+
+              <p style={{ fontSize: '2.3vh', marginTop: '5vh' }}>
+                {isRegistering ? 'Už máš účet?' : 'Nemáš ještě účet?'}{' '}
+                <button
+                  onClick={() => setIsRegistering(!isRegistering)}
+                  style={{ textDecoration: 'underline', fontSize: '2.3vh', cursor: 'pointer' }}
+                >
+                  {isRegistering ? 'Přihlásit se' : 'Registrovat'}
+                </button>
+              </p>
+            </div>
+          </div>)}
       </main>
     </div>
   );
