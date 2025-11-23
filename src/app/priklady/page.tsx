@@ -3,6 +3,7 @@
 import styles from '../Home.module.css';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { set } from 'better-auth';
 
 export default function Priklady() {
   const router = useRouter();
@@ -10,14 +11,53 @@ export default function Priklady() {
   const [correct, setCorrect] = useState("");
   const [priklad, setPriklad] = useState("");
   const [userId, setUserId] = useState("");
-  const [score, setScore] = useState(0);
+  //const [score, setScore] = useState(0);
+  const [globalScore, setGlobalScore] = useState(0);
+  const [normalScore, setNormalScore] = useState(0);
+  const [topicId, setTopicId] = useState(1);
 
   function generatePriklad() {
+    const topicGenerators = {
+      1: () => { // Sčítání do 50
+        const a = Math.floor(Math.random() * 50) + 1;
+        const b = Math.floor(Math.random() * 50) + 1;
+        setCorrect((a + b).toString());
+        setPriklad(`${a} + ${b} = ?`);
+      },
+      2: () => { // Odčítání do 50
+        const a = Math.floor(Math.random() * 50) + 1;
+        const b = Math.floor(Math.random() * a) + 1;
+        setCorrect((a - b).toString());
+        setPriklad(`${a} - ${b} = ?`);
+      },
+      3: () => { // Násobení do 10
+        const a = Math.floor(Math.random() * 10) + 1;
+        const b = Math.floor(Math.random() * 10) + 1;
+        setCorrect((a * b).toString());
+        setPriklad(`${a} × ${b} = ?`);
+      },
+      4: () => { // Dělení do 100
+        const b = Math.floor(Math.random() * 100) + 1;
+        const result = b * (Math.floor(Math.random() * 10) + 1);
+        const a = b * result;
+        setCorrect(result.toString());
+        setPriklad(`${a} ÷ ${b} = ?`);
+      }
+    };
+    if (topicGenerators[topicId]) {
+      topicGenerators[topicId]();
+    }else {
+      console.error(`Neznámý topicId: ${topicId}`);
+    }
+  }
+
+  /*function generatePriklad() {
     const a = Math.floor(Math.random() * 50) + 1;
     const b = Math.floor(Math.random() * 50) + 1;
     setCorrect((a + b).toString());
     setPriklad(`${a} + ${b} = ?`);
-  }
+  }*/
+
   useEffect(() => {
     generatePriklad();
 
@@ -34,6 +74,21 @@ export default function Priklady() {
   }, []);
 
   async function changeScore(id: String, action: String) {
+    const response = await fetch('/api/data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id, action, topicId }),
+    });
+    
+    const data = await response.json();
+    if (data) {
+      setNormalScore(data.normalScore);
+      setGlobalScore(data.globalScore);
+    }
+
+  /*async function changeScore(id: String, action: String) {
     await fetch('/api/data', {
       method: 'POST',
       headers: {
@@ -42,9 +97,34 @@ export default function Priklady() {
       body: JSON.stringify({ id, action }),
     });
     initializeScore(userId);
-  }
+  }*/
 
   async function initializeScore(id: String) {
+    if (!id) return;
+
+    try {
+      const response = await fetch(`/api/data?id=${id}&topicId=${topicId}`);
+
+      if (!response.ok) {
+        console.error('Failed to fetch score:', response.status);
+        return;
+      }
+
+      const data = await response.json();
+      if (data) {
+        if (typeof data.normalScore === 'number') {
+          setNormalScore(data.normalScore);
+        }
+        if (typeof data.globalScore === 'number') {
+          setGlobalScore(data.globalScore);
+        }
+      }
+    } catch (error) {
+      console.error('Error initializing score:', error);
+    }
+  }
+
+  /*async function initializeScore(id: String) {
     if (!id) return;
 
     try {
@@ -62,8 +142,31 @@ export default function Priklady() {
     } catch (error) {
       console.error('Error initializing score:', error);
     }
-  }
+  }*/
 
+  /* Potřeba vytvořit navigační lištu pro výběr typu příkladů. DĚKUJI
+  <nav style={{
+    display: "flex",
+    gap: "1rem",
+    padding: "1rem",
+    backgroundColor: "#eee",
+    position: "fixed", // Zajistí pevné umístění nahoře
+    top: 0, // Umístí lištu na vrchol stránky
+    left: 0,
+    width: "100%", // Zajistí, že lišta bude přes celou šířku
+    zIndex: 1000, // Zajistí, že lišta bude nad ostatním obsahem
+  }}>
+    <button onClick={() => { setTopicId(1); generatePriklad(); }}>Sčítání do 50</button>
+    <button onClick={() => { setTopicId(2); generatePriklad(); }}>Odčítání do 50</button>
+    <button onClick={() => { setTopicId(3); generatePriklad(); }}>Násobení do 100</button>
+    <button onClick={() => { setTopicId(4); generatePriklad(); }}>Dělení do 100</button>
+  </nav>
+
+    /* A dodělat zobrazení globálního skóre a skóre pro aktuální typ příkladů 
+      <h1 className={styles.title}>Globální skóre: {globalScore}</h1>
+      <h2 className={styles.title}>Skóre pro aktuální příklady: {normalScore}</h2>
+    */
+    
   return (
     <div className={styles.container}>
       <aside className={styles.side}>
