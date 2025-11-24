@@ -70,6 +70,14 @@ export async function POST(req: Request) {
                 headers: { 'Content-Type': 'application/json' }
             });
         }
+        //if action = incease+, increase score+ by 10% of the difference between 1000 and current score
+        //if action = decrease+, decrease score+ by 10% of current score
+        //if action = increase-, increase score- by 10% of the difference between 1000 and current score
+        //if action = decrease-, decrease score- by 10% of current score
+        //if action = increase*, increase score* by 10% of the difference between 1000 and current score
+        //if action = decrease*, decrease score* by 10% of current score
+        //if action = increase/, increase score/ by 10% of the difference between 1000 and current score
+        //if action = decrease/, decrease score/ by 10% of current score
 
         const updatedScore = await prisma.score.update({
             where: { id },
