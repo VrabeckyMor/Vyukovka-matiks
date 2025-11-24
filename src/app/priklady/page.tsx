@@ -18,30 +18,37 @@ export default function Priklady() {
 
   function generatePriklad() {
     const topicGenerators = {
-      1: () => { // Sčítání do 50
+      1: () => { 
         const a = Math.floor(Math.random() * 50) + 1;
         const b = Math.floor(Math.random() * 50) + 1;
         setCorrect((a + b).toString());
         setPriklad(`${a} + ${b} = ?`);
       },
-      2: () => { // Odčítání do 50
+      2: () => { 
         const a = Math.floor(Math.random() * 50) + 1;
         const b = Math.floor(Math.random() * a) + 1;
         setCorrect((a - b).toString());
         setPriklad(`${a} - ${b} = ?`);
       },
-      3: () => { // Násobení do 10
+      3: () => { 
         const a = Math.floor(Math.random() * 10) + 1;
         const b = Math.floor(Math.random() * 10) + 1;
         setCorrect((a * b).toString());
         setPriklad(`${a} × ${b} = ?`);
       },
-      4: () => { // Dělení do 100
+      4: () => { 
         const b = Math.floor(Math.random() * 100) + 1;
-        const result = b * (Math.floor(Math.random() * 10) + 1);
-        const a = b * result;
-        setCorrect(result.toString());
+        const res = b * (Math.floor(Math.random() * 10) + 1);
+        const a = b * res;
+        setCorrect(res.toString());
         setPriklad(`${a} ÷ ${b} = ?`);
+      }
+      5: () => {
+        const a = Math.floor(Math.random() * 50) + 1;
+        const b = Math.floor(Math.random() * 50) + 1;
+        const c = Math.floor(Math.random() * 50) + 1;
+        setCorrect((a + b - c).toString());
+        setPriklad(`${a} + ${b} - ${c} = ?`);
       }
     };
     if (topicGenerators[topicId]) {
@@ -87,7 +94,7 @@ export default function Priklady() {
       setNormalScore(data.normalScore);
       setGlobalScore(data.globalScore);
     }
-
+  }
   /*async function changeScore(id: String, action: String) {
     await fetch('/api/data', {
       method: 'POST',
