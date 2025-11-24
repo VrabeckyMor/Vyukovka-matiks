@@ -42,14 +42,23 @@ export default function Priklady() {
         const a = b * res;
         setCorrect(res.toString());
         setPriklad(`${a} ÷ ${b} = ?`);
-      }
+      },
       5: () => {
         const a = Math.floor(Math.random() * 50) + 1;
         const b = Math.floor(Math.random() * 50) + 1;
         const c = Math.floor(Math.random() * 50) + 1;
         setCorrect((a + b - c).toString());
         setPriklad(`${a} + ${b} - ${c} = ?`);
+      },
+      6: () => {
+        const x = Math.floor(Math.random() * 10) - 10;
+        const a = Math.floor(Math.random() * 20) + 1;
+        const b = Math.floor(Math.random() * 10) - 10;
+        const c = a * x + b;
+        setCorrect(x.toString());
+        setPriklad(`${a}x + ${b} = ${c}`);
       }
+
     };
     if (topicGenerators[topicId]) {
       topicGenerators[topicId]();
@@ -157,11 +166,11 @@ export default function Priklady() {
     gap: "1rem",
     padding: "1rem",
     backgroundColor: "#eee",
-    position: "fixed", // Zajistí pevné umístění nahoře
+    position: "fixed",
     top: 0, // Umístí lištu na vrchol stránky
     left: 0,
-    width: "100%", // Zajistí, že lišta bude přes celou šířku
-    zIndex: 1000, // Zajistí, že lišta bude nad ostatním obsahem
+    width: "100%",
+    zIndex: 1000,
   }}>
     <button onClick={() => { setTopicId(1); generatePriklad(); }}>Sčítání do 50</button>
     <button onClick={() => { setTopicId(2); generatePriklad(); }}>Odčítání do 50</button>
