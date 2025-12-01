@@ -8,28 +8,42 @@ export async function GET(req: Request) {
         const id = searchParams.get('id');
 
         if (!id) {
-            return new Response(JSON.stringify({ error: 'Missing id parameter' }), { 
+            return new Response(JSON.stringify({ error: 'Missing id parameter' }), {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' }
             });
         }
 
-        const score = await prisma.score.upsert({
+        let score = await prisma.score.findUnique({ //nefachčí
             where: { id },
-            update: {},
-            create: { 
-                id,
-                score: 0
-            },
         });
 
-        return new Response(JSON.stringify({ score: score.score }), { 
+        if (!score) {
+            prisma.score.create({
+                data: {
+                    id,
+                    score1: 0,
+                    score2: 0,
+                    score3: 0,
+                    score4: 0,
+                    score5: 0,
+                    score6: 0,
+                    globalScore: 0,
+                },
+            });
+        } 
+
+        score = await prisma.score.findUnique({
+            where: { id },
+        });
+
+        return new Response(JSON.stringify({score}), {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
         });
     } catch (error) {
         console.error('GET Error:', error);
-        return new Response(JSON.stringify({ error: 'Internal server error' }), { 
+        return new Response(JSON.stringify({ error: 'Internal server error' }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
         });
@@ -41,56 +55,113 @@ export async function POST(req: Request) {
         const body = await req.json();
         const id = body.id;
         const action = body.action;
+        const topicId = body.topicId;
 
         if (!id || !action) {
-            return new Response(JSON.stringify({ error: 'Missing id or action in request body' }), { 
+            return new Response(JSON.stringify({ error: 'Missing id or action in request body' }), {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' }
             });
         }
 
         const oldScore = await prisma.score.findUnique({ where: { id } });
-        
+
         if (!oldScore) {
-            return new Response(JSON.stringify({ error: 'Score not found' }), { 
+            return new Response(JSON.stringify({ error: 'Score not found' }), {
                 status: 404,
                 headers: { 'Content-Type': 'application/json' }
             });
         }
 
         let newScore: number;
-        
-        if (action === 'increase') {
-            newScore = Math.round((1000 - oldScore.score) / 10 + oldScore.score);
-        } else if (action === 'decrease') {
-            newScore = Math.round(oldScore.score - (oldScore.score / 10));
-        } else {
-            return new Response(JSON.stringify({ error: 'Invalid action' }), { 
-                status: 400,
-                headers: { 'Content-Type': 'application/json' }
-            });
+
+        if (action === "increase") {
+            if (topicId === 1) {
+                newScore = Math.round((1000 - oldScore.score1) / 10 + oldScore.score1);
+                const updatedScore = await prisma.score.update({
+                    where: { id },
+                    data: { score1: newScore },
+                });
+            } else if (topicId === 2) {
+                newScore = Math.round((1000 - oldScore.score2) / 10 + oldScore.score2);
+                const updatedScore = await prisma.score.update({
+                    where: { id },
+                    data: { score2: newScore },
+                });
+            } else if (topicId === 3) {
+                newScore = Math.round((1000 - oldScore.score3) / 10 + oldScore.score3);
+                const updatedScore = await prisma.score.update({
+                    where: { id },
+                    data: { score3: newScore },
+                });
+            } else if (topicId === 4) {
+                newScore = Math.round((1000 - oldScore.score4) / 10 + oldScore.score4);
+                const updatedScore = await prisma.score.update({
+                    where: { id },
+                    data: { score4: newScore },
+                });
+            } else if (topicId === 5) {
+                newScore = Math.round((1000 - oldScore.score5) / 10 + oldScore.score5);
+                const updatedScore = await prisma.score.update({
+                    where: { id },
+                    data: { score5: newScore },
+                });
+            } else if (topicId === 6) {
+                newScore = Math.round((1000 - oldScore.score6) / 10 + oldScore.score6);
+                const updatedScore = await prisma.score.update({
+                    where: { id },
+                    data: { score6: newScore },
+                });
+            }
+        } else if (action === "decrease") {
+            if (topicId === 1) {
+                newScore = Math.round(oldScore.score1 - (oldScore.score1 / 10));
+                const updatedScore = await prisma.score.update({
+                    where: { id },
+                    data: { score1: newScore },
+                });
+            } else if (topicId === 2) {
+                newScore = Math.round(oldScore.score2 - (oldScore.score2 / 10));
+                const updatedScore = await prisma.score.update({
+                    where: { id },
+                    data: { score2: newScore },
+                });
+            } else if (topicId === 3) {
+                newScore = Math.round(oldScore.score3 - (oldScore.score3 / 10));
+                const updatedScore = await prisma.score.update({
+                    where: { id },
+                    data: { score3: newScore },
+                });
+            } else if (topicId === 4) {
+                newScore = Math.round(oldScore.score4 - (oldScore.score4 / 10));
+                const updatedScore = await prisma.score.update({
+                    where: { id },
+                    data: { score4: newScore },
+                });
+            } else if (topicId === 5) {
+                newScore = Math.round(oldScore.score5 - (oldScore.score5 / 10));
+                const updatedScore = await prisma.score.update({
+                    where: { id },
+                    data: { score5: newScore },
+                });
+            } else if (topicId === 6) {
+                newScore = Math.round(oldScore.score6 - (oldScore.score6 / 10));
+                const updatedScore = await prisma.score.update({
+                    where: { id },
+                    data: { score6: newScore },
+                });
+            }
         }
-        //if action = incease+, increase score+ by 10% of the difference between 1000 and current score
-        //if action = decrease+, decrease score+ by 10% of current score
-        //if action = increase-, increase score- by 10% of the difference between 1000 and current score
-        //if action = decrease-, decrease score- by 10% of current score
-        //if action = increase*, increase score* by 10% of the difference between 1000 and current score
-        //if action = decrease*, decrease score* by 10% of current score
-        //if action = increase/, increase score/ by 10% of the difference between 1000 and current score
-        //if action = decrease/, decrease score/ by 10% of current score
 
-        const updatedScore = await prisma.score.update({
-            where: { id },
-            data: { score: newScore },
-        });
+        const updatedScore = await prisma.score.findUnique({ where: { id } });
 
-        return new Response(JSON.stringify(updatedScore), { 
+        return new Response(JSON.stringify(updatedScore), {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
         });
     } catch (error) {
         console.error('POST Error:', error);
-        return new Response(JSON.stringify({ error: 'Internal server error' }), { 
+        return new Response(JSON.stringify({ error: 'Internal server error' }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
         });

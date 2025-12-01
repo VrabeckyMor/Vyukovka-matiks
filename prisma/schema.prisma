@@ -75,5 +75,11 @@ model Verification {
 
 model Score {
   id    String  @id
-  score Int     @default(0)
+  score1 Int    @default(0)
+  score2 Int    @default(0)
+  score3 Int    @default(0)
+  score4 Int    @default(0)
+  score5 Int    @default(0)
+  score6 Int    @default(0)
+  globalScore Int    @default(0)
 }

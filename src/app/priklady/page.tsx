@@ -11,7 +11,6 @@ export default function Priklady() {
   const [correct, setCorrect] = useState("");
   const [priklad, setPriklad] = useState("");
   const [userId, setUserId] = useState("");
-  //const [score, setScore] = useState(0);
   const [globalScore, setGlobalScore] = useState(0);
   const [normalScore, setNormalScore] = useState(0);
   const [topicId, setTopicId] = useState(1);
@@ -60,19 +59,12 @@ export default function Priklady() {
       }
 
     };
-    if (topicGenerators[topicId]) {
-      topicGenerators[topicId]();
+    if (true) { //if (topicGenerators[topicId]) {
+      topicGenerators[6](); //topicGenerators[topicId](); 
     }else {
       console.error(`Neznámý topicId: ${topicId}`);
     }
   }
-
-  /*function generatePriklad() {
-    const a = Math.floor(Math.random() * 50) + 1;
-    const b = Math.floor(Math.random() * 50) + 1;
-    setCorrect((a + b).toString());
-    setPriklad(`${a} + ${b} = ?`);
-  }*/
 
   useEffect(() => {
     generatePriklad();
@@ -104,16 +96,6 @@ export default function Priklady() {
       setGlobalScore(data.globalScore);
     }
   }
-  /*async function changeScore(id: String, action: String) {
-    await fetch('/api/data', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id, action }),
-    });
-    initializeScore(userId);
-  }*/
 
   async function initializeScore(id: String) {
     if (!id) return;
@@ -140,26 +122,6 @@ export default function Priklady() {
     }
   }
 
-  /*async function initializeScore(id: String) {
-    if (!id) return;
-
-    try {
-      const response = await fetch(`/api/data?id=${id}`);
-
-      if (!response.ok) {
-        console.error('Failed to fetch score:', response.status);
-        return;
-      }
-
-      const data = await response.json();
-      if (data && typeof data.score === 'number') {
-        setScore(data.score);
-      }
-    } catch (error) {
-      console.error('Error initializing score:', error);
-    }
-  }*/
-
   /* Potřeba vytvořit navigační lištu pro výběr typu příkladů. DĚKUJI
   <nav style={{
     display: "flex",
@@ -176,13 +138,11 @@ export default function Priklady() {
     <button onClick={() => { setTopicId(2); generatePriklad(); }}>Odčítání do 50</button>
     <button onClick={() => { setTopicId(3); generatePriklad(); }}>Násobení do 100</button>
     <button onClick={() => { setTopicId(4); generatePriklad(); }}>Dělení do 100</button>
+    <button onClick={() => { setTopicId(5); generatePriklad(); }}>Sčítání a odčítání do 50</button>
+    <button onClick={() => { setTopicId(6); generatePriklad(); }}>Lineární rovnice</button>
   </nav>
+  */
 
-    /* A dodělat zobrazení globálního skóre a skóre pro aktuální typ příkladů 
-      <h1 className={styles.title}>Globální skóre: {globalScore}</h1>
-      <h2 className={styles.title}>Skóre pro aktuální příklady: {normalScore}</h2>
-    */
-    
   return (
     <div className={styles.container}>
       <aside className={styles.side}>
@@ -200,7 +160,8 @@ export default function Priklady() {
           display: 'flex',
           flexDirection: 'column',
         }}>
-          <h1 className={styles.title}>SKÓRE: {score}</h1>
+          <h1 className={styles.title}>Globální skóre: {globalScore}</h1>
+          <h1 className={styles.title}>Skóre: {normalScore}</h1>
           <div style={{alignItems: 'center', display: 'flex', flexDirection: 'row', gap: '2vh' }}>
             <h1 className={styles.title}>{priklad}
             </h1>
