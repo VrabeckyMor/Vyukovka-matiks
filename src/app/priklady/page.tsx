@@ -13,7 +13,13 @@ export default function Priklady() {
   const [userId, setUserId] = useState("");
   const [globalScore, setGlobalScore] = useState(0);
   const [normalScore, setNormalScore] = useState(0);
-  const [topicId, setTopicId] = useState(1);
+  const [topicId, setTopicId] = useState(4);
+  const [score1, setScore1] = useState(0);
+  const [score2, setScore2] = useState(0);
+  const [score3, setScore3] = useState(0);
+  const [score4, setScore4] = useState(0);
+  const [score5, setScore5] = useState(0);
+  const [score6, setScore6] = useState(0);
 
   function generatePriklad() {
     const topicGenerators = {
@@ -60,7 +66,7 @@ export default function Priklady() {
 
     };
     if (true) { //if (topicGenerators[topicId]) {
-      topicGenerators[6](); //topicGenerators[topicId](); 
+      topicGenerators[topicId](); //topicGenerators[topicId](); 
     }else {
       console.error(`Neznámý topicId: ${topicId}`);
     }
@@ -92,7 +98,12 @@ export default function Priklady() {
     
     const data = await response.json();
     if (data) {
-      setNormalScore(data.normalScore);
+      setScore1(data.score1);
+      setScore2(data.score2);
+      setScore3(data.score3);
+      setScore4(data.score4);
+      setScore5(data.score5);
+      setScore6(data.score6);
       setGlobalScore(data.globalScore);
     }
   }
@@ -161,7 +172,12 @@ export default function Priklady() {
           flexDirection: 'column',
         }}>
           <h1 className={styles.title}>Globální skóre: {globalScore}</h1>
-          <h1 className={styles.title}>Skóre: {normalScore}</h1>
+          <h1 className={styles.title}>Skóre1: {score1}</h1>
+          <h1 className={styles.title}>Skóre2: {score2}</h1>
+          <h1 className={styles.title}>Skóre3: {score3}</h1>
+          <h1 className={styles.title}>Skóre4: {score4}</h1>
+          <h1 className={styles.title}>Skóre5: {score5}</h1>
+          <h1 className={styles.title}>Skóre6: {score6}</h1>
           <div style={{alignItems: 'center', display: 'flex', flexDirection: 'row', gap: '2vh' }}>
             <h1 className={styles.title}>{priklad}
             </h1>
