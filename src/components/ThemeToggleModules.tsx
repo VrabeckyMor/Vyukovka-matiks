@@ -1,5 +1,6 @@
 "use client";
 
+import styles from '../app/Home.module.css';
 import { useEffect, useState } from "react";
 
 const LIGHT_DARK: string[] = ["light", "dark"];
@@ -78,18 +79,7 @@ export default function ThemeToggleModules() {
       onClick={handleLeftClick}
       onContextMenu={handleContextMenu}
       title={`Current theme: ${theme} | Left-click to cycle, Right-click for special themes`}
-      style={{
-        position: "fixed",
-        top: "12px",
-        right: "12px",
-        padding: "6px 10px",
-        borderRadius: 8,
-        border: "none",
-        background: "rgba(0, 0, 0, 0.15)",
-        color: "white",
-        cursor: "pointer",
-        zIndex: 9999,
-      }}
+      className={styles.toggle}
     >
       {emoji}
     </button>

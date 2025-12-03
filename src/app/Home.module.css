@@ -15,11 +15,13 @@
 
 .title {
     color: var(--title-color);
-    padding: 10px;
-    margin: 5px;
+    margin: 7vw;
+    margin-left: calc(35vh + 7vw);
     font-size: 4vh;
-    text-align: center;
+    justify-items: auto;
+    text-align: justify;
     font-weight: bold;
+    z-index: 0;
 }
 
 .btn {
@@ -70,10 +72,12 @@
     background-color: var(--side-bg);
     width: 35vh;
     height: 100vh;
+    position: fixed;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 2rem 1rem;
+    left: 0;
     cursor: vertical-text;
     z-index: 1;
     transition: 0.3s;
@@ -91,6 +95,19 @@
     margin: 2.1vh;
 }
 
+.toggle {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(0, 0, 0, 0.15);
+    color: white;
+    cursor: pointer;
+    z-index: 9999;
+}
+
 @media (max-width: 80vh) {
     .container {
         flex-direction: column;
@@ -104,32 +121,50 @@
 
     .title {
         font-size: 5.5vw;
-        margin: 10vw;
+        margin-left: 10vw;
+        margin-right: 10vw;
+        margin-top: 18vh;
+        margin-bottom: 10vh;
         text-align: justify;
     }
 
     .side {
         width: 100%;
-        height: auto;
+        height: 16vh;
         flex-direction: row;
         border-radius: 0;
         box-shadow: none;
         padding: 1rem 0.5rem;
         justify-content: center;
+        top: 0;
     }
 
     .side:hover {
         width: 100%;
     }
 
-    .side .btn {
+    .side:hover .btn {
         margin: 1vh;
     }
 
 
     .btn {
         position: relative;
-       padding: 2vw auto;
+        padding: 2vw auto;
         font-size: 5vw;
     }
+
+    .toggle {
+        position: fixed;
+        top: 17vh;
+        right: 3px;
+        padding: 2px 4px;
+        border-radius: 5px;
+        border: none;
+        background: rgba(0, 0, 0, 0.15);
+        color: white;
+        cursor: pointer;
+        z-index: 2;
+    }
+
 }

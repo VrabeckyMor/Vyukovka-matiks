@@ -13,7 +13,7 @@ export default function Priklady() {
   const [userId, setUserId] = useState("");
   const [globalScore, setGlobalScore] = useState(0);
   const [normalScore, setNormalScore] = useState(0);
-  const [topicId, setTopicId] = useState(4);
+  const [topicId, setTopicId] = useState(1);
   const [score1, setScore1] = useState(0);
   const [score2, setScore2] = useState(0);
   const [score3, setScore3] = useState(0);
