@@ -4,6 +4,7 @@ import styles from '../Home.module.css';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { set } from 'better-auth';
+import { checkEndpointConflicts } from 'better-auth/api';
 
 export default function Priklady() {
   const router = useRouter();
@@ -21,27 +22,38 @@ export default function Priklady() {
   const [score5, setScore5] = useState(0);
   const [score6, setScore6] = useState(0);
 
+  const currentScore = topicId === 1 ? score1
+    : topicId === 2 ? score2
+      : topicId === 3 ? score3
+        : topicId === 4 ? score4
+          : topicId === 5 ? score5
+            : score6;
+
   function generatePriklad() {
+    generatePrikladFor();
+  }
+
+  function generatePrikladFor(topic?: number) {
     const topicGenerators = {
-      1: () => { 
+      1: () => {
         const a = Math.floor(Math.random() * 50) + 1;
         const b = Math.floor(Math.random() * 50) + 1;
         setCorrect((a + b).toString());
         setPriklad(`${a} + ${b} = ?`);
       },
-      2: () => { 
+      2: () => {
         const a = Math.floor(Math.random() * 50) + 1;
         const b = Math.floor(Math.random() * a) + 1;
         setCorrect((a - b).toString());
         setPriklad(`${a} - ${b} = ?`);
       },
-      3: () => { 
+      3: () => {
         const a = Math.floor(Math.random() * 10) + 1;
         const b = Math.floor(Math.random() * 10) + 1;
         setCorrect((a * b).toString());
         setPriklad(`${a} × ${b} = ?`);
       },
-      4: () => { 
+      4: () => {
         const b = Math.floor(Math.random() * 100) + 1;
         const res = b * (Math.floor(Math.random() * 10) + 1);
         const a = b * res;
@@ -65,11 +77,24 @@ export default function Priklady() {
       }
 
     };
-    if (true) { //if (topicGenerators[topicId]) {
-      topicGenerators[topicId](); //topicGenerators[topicId](); 
-    }else {
-      console.error(`Neznámý topicId: ${topicId}`);
+    const idToUse = typeof topic === 'number' ? topic : topicId;
+    if (topicGenerators[idToUse]) {
+      topicGenerators[idToUse]();
+    } else {
+      console.error(`Neznámý topicId: ${idToUse}`);
     }
+  }
+
+  function prevTopic() {
+    const prev = topicId === 1 ? 6 : topicId - 1;
+    setTopicId(prev);
+    generatePrikladFor(prev);
+  }
+
+  function nextTopic() {
+    const nxt = topicId === 6 ? 1 : topicId + 1;
+    setTopicId(nxt);
+    generatePrikladFor(nxt);
   }
 
   useEffect(() => {
@@ -95,7 +120,7 @@ export default function Priklady() {
       },
       body: JSON.stringify({ id, action, topicId }),
     });
-    
+
     const data = await response.json();
     if (data) {
       setScore1(data.score1);
@@ -119,14 +144,18 @@ export default function Priklady() {
         return;
       }
 
-      const data = await response.json();
+      let data = await response.json();
+      // if API returns { score: {...} } handle that, otherwise accept plain object
+      if (data && data.score) data = data.score;
+
       if (data) {
-        if (typeof data.normalScore === 'number') {
-          setNormalScore(data.normalScore);
-        }
-        if (typeof data.globalScore === 'number') {
-          setGlobalScore(data.globalScore);
-        }
+        if (typeof data.score1 === 'number') setScore1(data.score1);
+        if (typeof data.score2 === 'number') setScore2(data.score2);
+        if (typeof data.score3 === 'number') setScore3(data.score3);
+        if (typeof data.score4 === 'number') setScore4(data.score4);
+        if (typeof data.score5 === 'number') setScore5(data.score5);
+        if (typeof data.score6 === 'number') setScore6(data.score6);
+        if (typeof data.globalScore === 'number') setGlobalScore(data.globalScore);
       }
     } catch (error) {
       console.error('Error initializing score:', error);
@@ -162,42 +191,33 @@ export default function Priklady() {
         <button className={styles.btn} onClick={() => router.push("/priklady")}>PŘÍKLADY</button>
       </aside>
       <main className={styles.main}>
-        <div style={{
-          width: '100%',
-          height: '100%',
-          textAlign: 'center',
-          alignItems: 'center',
-          justifyContent: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-        }}>
-          <h1 className={styles.title}>Globální skóre: {globalScore}</h1>
-          <h1 className={styles.title}>Skóre1: {score1}</h1>
-          <h1 className={styles.title}>Skóre2: {score2}</h1>
-          <h1 className={styles.title}>Skóre3: {score3}</h1>
-          <h1 className={styles.title}>Skóre4: {score4}</h1>
-          <h1 className={styles.title}>Skóre5: {score5}</h1>
-          <h1 className={styles.title}>Skóre6: {score6}</h1>
-          <div style={{alignItems: 'center', display: 'flex', flexDirection: 'row', gap: '2vh' }}>
-            <h1 className={styles.title}>{priklad}
-            </h1>
-            <input style={{ display: 'block', fontSize: '2.5vh', width: '50%', backgroundColor: '#0085855e', padding: '1vh', borderRadius: '12px', border: '2px solid #00000042' }} value={answer} onChange={(e) => setAnswer(e.target.value)}></input>
-          </div>
-          <button className={styles.btn} onClick={() => {
-            if (answer === correct) {
-              alert("Správně!");
-              changeScore(userId, "increase");
-              initializeScore(userId);
-              generatePriklad();
-              setAnswer("");
-            } else {
-              alert("Špatně, zkus to znovu.");
-              changeScore(userId, "decrease");
-              initializeScore(userId);
-              setAnswer("");
-            }
-          }}>Odeslat</button>
+        <div style={{ position: 'fixed', top: '52.5%', display: 'flex', gap: '40vh', alignItems: 'center', zIndex: 99999 }}>
+          <button onClick={prevTopic} aria-label="previous topic" style={{ background: '#0050b3', color: '#fff', fontSize: '3vh', width: '4.5vh', height: '4.5vh', borderRadius: '8px', cursor: 'pointer', border: 'none' }}>‹</button>
+          <button onClick={nextTopic} aria-label="next topic" style={{ background: '#0050b3', color: '#fff', fontSize: '3vh', width: '4.5vh', height: '4.5vh', borderRadius: '8px', cursor: 'pointer', border: 'none' }}>›</button>
         </div>
+
+        <h1 className={styles.title}>Skóre{topicId}: {typeof currentScore === 'number' ? currentScore : 0}</h1>
+        <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', gap: '2vh', background: '#1b68c035', borderRadius: '50px', paddingTop: '10vh', paddingBottom: '10vh', paddingLeft: '15vh', paddingRight: '15vh', margin: '4vh' }}>
+          <h1 className={styles.title} style={{ margin: 0,marginBottom: '2vh',  textAlign: 'center' }}>{priklad}</h1>
+          <div style={{ width: '60%', minWidth: '240px' }}>
+            <input style={{ display: 'block', fontSize: '2.5vh', width: '100%', backgroundColor: '#0085855e', padding: '1vh', borderRadius: '12px', border: '3px solid #429c9c42' }} value={answer} onChange={(e) => setAnswer(e.target.value)} />
+          </div>
+        </div>
+        <button className={styles.btn} onClick={() => {
+          if (answer === correct) {
+            alert("Správně!");
+            changeScore(userId, "increase");
+            initializeScore(userId);
+            generatePriklad();
+            setAnswer("");
+          } else {
+            alert("Špatně, zkus to znovu.");
+            changeScore(userId, "decrease");
+            initializeScore(userId);
+            setAnswer("");
+          }
+        }}>Odeslat</button>
+
       </main >
     </div >
   );

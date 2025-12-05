@@ -19,7 +19,8 @@ export async function GET(req: Request) {
         });
 
         if (!score) {
-            prisma.score.create({
+            // ensure record is created before continuing
+            await prisma.score.create({
                 data: {
                     id,
                     score1: 0,
@@ -28,16 +29,14 @@ export async function GET(req: Request) {
                     score4: 0,
                     score5: 0,
                     score6: 0,
-                    globalScore: 0,
                 },
             });
-        } 
+        }
 
-        score = await prisma.score.findUnique({
-            where: { id },
-        });
+        score = await prisma.score.findUnique({ where: { id } });
 
-        return new Response(JSON.stringify({score}), {
+        // return the score object directly for a consistent client shape
+        return new Response(JSON.stringify(score), {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
         });
@@ -55,7 +54,8 @@ export async function POST(req: Request) {
         const body = await req.json();
         const id = body.id;
         const action = body.action;
-        const topicId = body.topicId;
+        // topicId may come as a string from the client; coerce to number
+        const topicId = Number(body.topicId);
 
         if (!id || !action) {
             return new Response(JSON.stringify({ error: 'Missing id or action in request body' }), {
