@@ -78,7 +78,7 @@ export default function Priklady() {
     };
     const idToUse = typeof topic === 'number' ? topic : topicId;
     if (topicGenerators[idToUse]) {
-      topicGenerators[idToUse]();
+      topicGenerators[idToUse](); //jikar
     } else {
       console.error(`Neznámý topicId: ${idToUse}`);
     }
