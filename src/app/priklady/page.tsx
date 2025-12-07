@@ -53,7 +53,7 @@ export default function Priklady() {
         setPriklad(`${a} × ${b} = ?`);
       },
       4: () => {
-        const b = Math.floor(Math.random() * 100) + 1;
+        const b = Math.floor(Math.random() * 10) + 1;
         const res = b * (Math.floor(Math.random() * 10) + 1);
         const a = b * res;
         setCorrect(res.toString());
@@ -67,9 +67,9 @@ export default function Priklady() {
         setPriklad(`${a} + ${b} - ${c} = ?`);
       },
       6: () => {
-        const x = Math.floor(Math.random() * 10) - 10;
+        const x = Math.floor(Math.random() * 10) + 1;
         const a = Math.floor(Math.random() * 20) + 1;
-        const b = Math.floor(Math.random() * 10) - 10;
+        const b = Math.floor(Math.random() * 10) + 1;
         const c = a * x + b;
         setCorrect(x.toString());
         setPriklad(`${a}x + ${b} = ${c}`);
