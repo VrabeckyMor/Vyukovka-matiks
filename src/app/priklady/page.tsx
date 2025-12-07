@@ -13,8 +13,7 @@ export default function Priklady() {
   const [priklad, setPriklad] = useState("");
   const [userId, setUserId] = useState("");
   const [globalScore, setGlobalScore] = useState(0);
-  const [normalScore, setNormalScore] = useState(0);
-  const [topicId, setTopicId] = useState(1);
+  const [topicId, setTopicId] = useState<number>(1);
   const [score1, setScore1] = useState(0);
   const [score2, setScore2] = useState(0);
   const [score3, setScore3] = useState(0);
@@ -34,7 +33,7 @@ export default function Priklady() {
   }
 
   function generatePrikladFor(topic?: number) {
-    const topicGenerators = {
+    const topicGenerators: Record<number, () => void> = {
       1: () => {
         const a = Math.floor(Math.random() * 50) + 1;
         const b = Math.floor(Math.random() * 50) + 1;
@@ -112,7 +111,7 @@ export default function Priklady() {
     fetchUserAccount();
   }, []);
 
-  async function changeScore(id: String, action: String) {
+  async function changeScore(id: string, action: string) {
     const response = await fetch('/api/data', {
       method: 'POST',
       headers: {
@@ -133,7 +132,7 @@ export default function Priklady() {
     }
   }
 
-  async function initializeScore(id: String) {
+  async function initializeScore(id: string) {
     if (!id) return;
 
     try {
