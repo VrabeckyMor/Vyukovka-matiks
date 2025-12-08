@@ -189,7 +189,7 @@ export default function Priklady() {
         <button className={styles.btn} onClick={() => router.push("/onas")}>O NÁS</button>
         <button className={styles.btn} onClick={() => router.push("/teorie")}>TEORIE</button>
         <button className={styles.btn} onClick={() => router.push("/priklady")}>PŘÍKLADY</button>
-        <button className={styles.btn} onClick={() => signOut()}>Odhlásit</button>
+        <button className={styles.btn} onClick={() => signOut()}>ODHLÁSIT</button>
       </aside>
       <main className={styles.main}>
         <div style={{ position: 'fixed', top: '52.5%', display: 'flex', gap: '40vh', alignItems: 'center', zIndex: 99999 }}>

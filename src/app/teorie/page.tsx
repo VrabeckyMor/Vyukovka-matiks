@@ -14,7 +14,7 @@ export default function Teorie() {
         <button className={styles.btn} onClick={() => router.push("/onas")}>O NÁS</button>
         <button className={styles.btn} onClick={() => router.push("/teorie")}>TEORIE</button>
         <button className={styles.btn} onClick={() => router.push("/priklady")}>PŘÍKLADY</button>
-        <button className={styles.btn} onClick={() => signOut()}>Odhlásit</button>
+        <button className={styles.btn} onClick={() => signOut()}>ODHLÁSIT</button>
       </aside>
       <main className={styles.main} style={{ display: 'flex', flexDirection: 'column'}}>
           <h1 className={styles.title}>Na této stránce právě pracujeme!
