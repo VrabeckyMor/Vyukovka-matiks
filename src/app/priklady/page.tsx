@@ -161,28 +161,6 @@ export default function Priklady() {
       console.error('Error initializing score:', error);
     }
   }
-
-  /* Potřeba vytvořit navigační lištu pro výběr typu příkladů. DĚKUJI
-  <nav style={{
-    display: "flex",
-    gap: "1rem",
-    padding: "1rem",
-    backgroundColor: "#eee",
-    position: "fixed",
-    top: 0, // Umístí lištu na vrchol stránky
-    left: 0,
-    width: "100%",
-    zIndex: 1000,
-  }}>
-    <button onClick={() => { setTopicId(1); generatePriklad(); }}>Sčítání do 50</button>
-    <button onClick={() => { setTopicId(2); generatePriklad(); }}>Odčítání do 50</button>
-    <button onClick={() => { setTopicId(3); generatePriklad(); }}>Násobení do 100</button>
-    <button onClick={() => { setTopicId(4); generatePriklad(); }}>Dělení do 100</button>
-    <button onClick={() => { setTopicId(5); generatePriklad(); }}>Sčítání a odčítání do 50</button>
-    <button onClick={() => { setTopicId(6); generatePriklad(); }}>Lineární rovnice</button>
-  </nav>
-  */
-
   return (
     <div className={styles.container}>
       <aside className={styles.side}>
@@ -192,13 +170,13 @@ export default function Priklady() {
         <button className={styles.btn} onClick={() => signOut()}>ODHLÁSIT</button>
       </aside>
       <main className={styles.main}>
-        <div style={{ position: 'fixed', top: '52.5%', display: 'flex', gap: '40vh', alignItems: 'center', zIndex: 99999 }}>
+        <div style={{ position: 'fixed', top: '52.5%', display: 'flex', gap: '30vh', alignItems: 'center', zIndex: 99999 }}>
           <button onClick={prevTopic} aria-label="previous topic" style={{ background: '#0050b3', color: '#fff', fontSize: '3vh', width: '4.5vh', height: '4.5vh', borderRadius: '8px', cursor: 'pointer', border: 'none' }}>‹</button>
           <button onClick={nextTopic} aria-label="next topic" style={{ background: '#0050b3', color: '#fff', fontSize: '3vh', width: '4.5vh', height: '4.5vh', borderRadius: '8px', cursor: 'pointer', border: 'none' }}>›</button>
         </div>
 
-        <h1 className={styles.title}>Skóre{topicId}: {typeof currentScore === 'number' ? currentScore : 0}</h1>
-        <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', gap: '2vh', background: '#1b68c035', borderRadius: '50px', paddingTop: '10vh', paddingBottom: '10vh', paddingLeft: '15vh', paddingRight: '15vh', margin: '4vh' }}>
+        <h1 className={styles.title}>Skóre: {typeof currentScore === 'number' ? currentScore : 0}</h1>
+        <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', gap: '2vh', background: '#1b68c035', borderRadius: '50px', paddingTop: '10vh', paddingBottom: '10vh', paddingLeft: '9vh', paddingRight: '9vh', margin: '4vh' }}>
           <h1 className={styles.title} style={{ margin: 0,marginBottom: '2vh',  textAlign: 'center' }}>{priklad}</h1>
           <div style={{ width: '60%', minWidth: '240px' }}>
             <input style={{ display: 'block', fontSize: '2.5vh', width: '100%', backgroundColor: '#0085855e', padding: '1vh', borderRadius: '12px', border: '3px solid #429c9c42' }} value={answer} onChange={(e) => setAnswer(e.target.value)} />
