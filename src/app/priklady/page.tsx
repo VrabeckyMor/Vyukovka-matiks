@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { set } from 'better-auth';
 import { checkEndpointConflicts } from 'better-auth/api';
-import { signOut } from '@/lib/auth-client';
+import { signIn, signUp, signOut, useSession } from '@/lib/auth-client'
 
 export default function Priklady() {
   const router = useRouter();

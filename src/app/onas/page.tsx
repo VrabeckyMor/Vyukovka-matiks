@@ -3,7 +3,7 @@
 import styles from '../Home.module.css';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { signOut } from '@/lib/auth-client';
+import { signIn, signUp, signOut, useSession } from '@/lib/auth-client'
 
 export default function Home() {
   const router = useRouter();
