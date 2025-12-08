@@ -162,7 +162,7 @@ export default function Home() {
           </div>
         ) : (
           <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ backgroundColor: '#00559b46', padding: '10vh 12vh', width: '75vh', borderRadius: '30px' }}>
+            <div style={{ backgroundColor: '#00559b46', padding: '10vw 5vw', width: '80vw', borderRadius: '30px', maxWidth: '67vh' }}>
               <h2 style={{ textAlign: 'center', fontSize: '5vh', fontWeight: 'bold', marginBottom: '2vh' }}>{isRegistering ? 'REGISTRACE' : 'PŘIHLÁŠENÍ'}</h2>
 
               {isRegistering && (

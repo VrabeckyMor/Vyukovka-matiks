@@ -139,6 +139,7 @@
         padding: 1rem 0.5rem;
         justify-content: center;
         top: 0;
+        margin-left: 0;
     }
 
     .side:hover {
