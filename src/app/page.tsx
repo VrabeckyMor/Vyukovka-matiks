@@ -155,10 +155,14 @@ export default function Home() {
 
       <main style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', minHeight: '60vh' }}>
         {(session && session.user?.email) ? (
+
           <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ padding: '2rem' }}>
-              <button onClick={() => signOut()}>Odhlásit</button>
-            </div>
+            <aside className={styles.side}>
+              <button className={styles.btn} onClick={() => router.push("/onas")}>O NÁS</button>
+              <button className={styles.btn} onClick={() => router.push("/teorie")}>TEORIE</button>
+              <button className={styles.btn} onClick={() => router.push("/priklady")}>PŘÍKLADY</button>
+              <button className={styles.btn} onClick={() => signOut()}>Odhlásit</button>
+            </aside>
           </div>
         ) : (
           <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

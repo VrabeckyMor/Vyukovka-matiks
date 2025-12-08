@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { set } from 'better-auth';
 import { checkEndpointConflicts } from 'better-auth/api';
+import { signOut } from '@/lib/auth-client';
 
 export default function Priklady() {
   const router = useRouter();
@@ -188,6 +189,7 @@ export default function Priklady() {
         <button className={styles.btn} onClick={() => router.push("/onas")}>O NÁS</button>
         <button className={styles.btn} onClick={() => router.push("/teorie")}>TEORIE</button>
         <button className={styles.btn} onClick={() => router.push("/priklady")}>PŘÍKLADY</button>
+        <button className={styles.btn} onClick={() => signOut()}>Odhlásit</button>
       </aside>
       <main className={styles.main}>
         <div style={{ position: 'fixed', top: '52.5%', display: 'flex', gap: '40vh', alignItems: 'center', zIndex: 99999 }}>
