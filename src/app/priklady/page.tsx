@@ -21,6 +21,7 @@ export default function Priklady() {
   const [score4, setScore4] = useState(0);
   const [score5, setScore5] = useState(0);
   const [score6, setScore6] = useState(0);
+  const [btnColor, setBtnColor] = useState("");
 
   const currentScore = topicId === 1 ? score1
     : topicId === 2 ? score2
@@ -182,15 +183,15 @@ export default function Priklady() {
             <input style={{ display: 'block', fontSize: '2.5vh', width: '100%', backgroundColor: '#0085855e', padding: '1vh', borderRadius: '12px', border: '3px solid #429c9c42' }} value={answer} onChange={(e) => setAnswer(e.target.value)} />
           </div>
         </div>
-        <button className={styles.btn} onClick={() => {
+        <button className={styles.btn} style={{ backgroundColor: btnColor }} onClick={() => {
           if (answer === correct) {
-            alert("Správně!");
+            setBtnColor("green");
             changeScore(userId, "increase");
             initializeScore(userId);
             generatePriklad();
             setAnswer("");
           } else {
-            alert("Špatně, zkus to znovu.");
+            setBtnColor("red");
             changeScore(userId, "decrease");
             initializeScore(userId);
             setAnswer("");
