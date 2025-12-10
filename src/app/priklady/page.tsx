@@ -186,12 +186,18 @@ export default function Priklady() {
         <button className={styles.btn} style={{ backgroundColor: btnColor }} onClick={() => {
           if (answer === correct) {
             setBtnColor("green");
+            setTimeout(() => {
+              setBtnColor("");
+            }, 2000);
             changeScore(userId, "increase");
             initializeScore(userId);
             generatePriklad();
             setAnswer("");
           } else {
             setBtnColor("red");
+            setTimeout(() => {
+              setBtnColor("");
+            }, 2000);
             changeScore(userId, "decrease");
             initializeScore(userId);
             setAnswer("");
